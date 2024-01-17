@@ -43,42 +43,46 @@ const App = () => {
             <AppBar position="relative">
                 <Toolbar style={{background: 'white', height: '118', width: '100%', margin: '0px', padding: '0px'}}>
                     <Grid container style={{width: '100%', margin: '0px', padding: '0'}}>
-                        <Grid item xs = {9}><img src={ require('./ywca-logo.jpg')} height={118} style={{paddingTop: '10px', paddingLeft: '50px'}}/></Grid>
+                        <Grid item xs = {9}><img src={ require('./ywca-logo.jpg')} alt="ywca logo" height={118} style={{paddingTop: '10px', paddingLeft: '50px'}}/></Grid>
                         <Grid item xs = {3}  style={{background: 'orange', justifyContent: "center", alignItems: "center", display: "flex"}}><Typography variant="h1" style={{color: 'white', paddingTop: '5px', fontFamily: "Noto Sans Oriya", fontSize: '60px'}}>Billing</Typography></Grid>
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <main style={{background: "#383838"}}>
+            <main style={{background: "#fff"}}>
 
             <FormControl fullWidth>
+                <div className="flex-box">
+                <div>
+                    <TextField type="file" files={selectedFile} onChange={handleFileChange}>Upload CSV File</TextField>
+                </div>
 
-                <TextField type="file" files={selectedFile} onChange={handleFileChange}>Upload CSV File</TextField>
+                <div>
+                    <p>Select Vendor</p>
+                    <Select
+                        labelId="vendor-select-label"
+                        id="vendor-select-label"
+                        value={selectedVendor}
+                        label="Select Vendor"
+                        onChange={handleVendorChange}
+                    >
+                        {vendors.map(ven => <MenuItem value={ven}>{ven}</MenuItem>)}
+                    </Select>
 
-                <InputLabel id="vendor-select-label">Select Vendor</InputLabel>
-                <Select
-                    labelId="vendor-select-label"
-                    id="vendor-select-label"
-                    value={selectedVendor}
-                    label="Select Vendor"
-                    onChange={handleVendorChange}
-                >
-                    {vendors.map(ven => <MenuItem value={ven}>{ven}</MenuItem>)}
-                </Select>
 
-                <div class="verticalSpace"></div>
-                
-                <InputLabel id="level-select-label">Select Level</InputLabel>
-                <Select
-                    labelId="level-select-label"
-                    id="level-select-label"
-                    value={selectedLevel}
-                    label="Select Level"
-                    onChange={handleLevelChange}
-                >
-                    {levels.map(level => <MenuItem value={level}>Level {level}</MenuItem>)}            
-                </Select>
+                    <p>Select Level</p>
+                    <Select
+                        labelId="level-select-label"
+                        id="level-select-label"
+                        value={selectedLevel}
+                        label="Select Level"
+                        onChange={handleLevelChange}
+                    >
+                        {levels.map(level => <MenuItem value={level}>Level {level}</MenuItem>)}            
+                    </Select>
 
-                <TextField multiline value={notesText} onChange={handleNotesChange}/>
+                    <TextField multiline value={notesText} onChange={handleNotesChange}/>
+                </div>
+            </div>
 
                 <Button variant="contained" color="primary" component="span" onClick={(e) => handleClick(e.target.files)}>
                     Upload
