@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, CssBaseline, Grid, Toolbar, Typography} from "@mui/material"
+import {AppBar, CssBaseline, Grid, Toolbar, Typography, Slider} from "@mui/material"
 import {DropzoneArea} from 'material-ui-dropzone'
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -7,17 +7,30 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Papa from "papaparse"
-
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 const App = () => {
     const [age, setAge] = React.useState('');
-    const [level, setLevel] = React.useState('');
+    const [level, setLevel] = React.useState('Select Level');
+    const [vendor, setVendor] = React.useState('Select Vendor');
+    const [scholarship, setScholarship] = React.useState(0);
+    const vendors = ["Vendor 1", "Vendor 2", "Vendor 3", "Vendor 4", "Vendor 5", "Veo", "Variable"]
     const handleChange = (event) => {
         setAge(event.target.value);
     };
-    const handleChange2 = (event) => {
+
+    const handleChangeLevel = (event) => {
         setLevel(event.target.value);
     };
+
+    const handleChangeVendor = (event) => {
+        setVendor(event.target.value)
+    }
+
+    const handleScholarshipChange = (event) => {
+      setScholarship(event.target.value)
+    }
 
     const fileAdded = (files) => {
         if (files.length != 0) {
@@ -57,41 +70,51 @@ const App = () => {
             <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
             <Box sx={{ minWidth: 120}} style={{height: '100px'}}>
       <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Vendor</InputLabel>
-        <Select
-          labelId="demo-simple-select-required-label"
-          id="demo-simple-select-required"
-          value={age}
-          label="Vendor"
-          onChange={handleChange}
-          style={{height: '100%', paddingLeft: '20px', fontSize: '20px', paddingTop: '10px'}}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
+        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>{vendor}</InputLabel>
+        <Autocomplete
+        id="autocomplete-input"
+        options={vendors}
+        renderInput={(params) => (
+          <TextField {...params} label="Vendors" variant="outlined" />
+        )}
+      />
+      
+          <MenuItem value={"Vendor 1"}>Vendor 1</MenuItem>
+          <MenuItem value={"Vendor 2"}>Vendor 2</MenuItem>
+          <MenuItem value={"Vendor 3"}>Vendor 3</MenuItem>
+          <MenuItem value={"Vendor 4"}>Vendor 4</MenuItem>
       </FormControl>
     </Box>
     <Box sx={{ minWidth: 120}} style={{height: '100px', marginTop: '50px'}}>
       <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Level</InputLabel>
+        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>{level}</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
           id="demo-simple-select-required"
-          value={level}
+          value={""}
           label="Vendor"
-          onChange={handleChange2}
-          style={{height: '100%', paddingLeft: '20px', fontSize: '20px', paddingTop: '10px'}}
+          onChange={handleChangeLevel}
+          style={{height: '100%', paddingLeft: '20px', fontSize: '20px', paddingTop: '20px'}}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value={"Level 1"}>Level 1</MenuItem>
+          <MenuItem value={"Level 2"}>Level 2</MenuItem>
+          <MenuItem value={"Level 3"}>Level 3</MenuItem>
         </Select>
       </FormControl>
     </Box>
+    <Box className={"sliderBox"}>
+            <FormControl variant="filled" style={{background: 'white', borderRadius: '20px'}} fullWidth>
+              <div  className="slider-container">
+                <InputLabel id="demo-simple-select-required-label-scholarship" style={{color: 'black', fontSize: '30px', paddingTop: '25px', paddingLeft: '25px'}}>Scholarship</InputLabel>
+                <Slider className={"slider-slide"} value={scholarship} onChange={handleScholarshipChange} step={10} marks min={0} max={100} labelId={"demo-simple-select-required-label-scholarship"}/>
+              </div>
+            </FormControl>
+    </Box>
+
             </Grid>
             </Grid>
-        </>
+
+      </>
     );
 }
 
