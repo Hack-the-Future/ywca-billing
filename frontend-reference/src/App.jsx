@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, CssBaseline, Grid, Toolbar, Typography} from "@mui/material"
+import {AppBar, CssBaseline, Grid, Toolbar, Typography, Button} from "@mui/material"
 import {DropzoneArea} from 'material-ui-dropzone'
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -60,7 +60,7 @@ const App = () => {
             <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
             <Box sx={{ minWidth: 120}} style={{height: '100px'}}>
       <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Vendor</InputLabel>
+        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', fontFamily: 'Noto Sans Oriya', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Vendor</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
           id="demo-simple-select-required"
@@ -97,13 +97,13 @@ const App = () => {
         </>
         <div style={{height: '100vh', background: '#1E1E1E'}}>
             <Grid container style={{height: '100%', background: "#1E1E1E"}}>
-            <Grid item xs = {5} style={{paddingTop: '230px', paddingLeft: '50px'}}><DropzoneArea
-                filesLimit={1}
-                acceptedFiles={['text/csv']}
-                dropzoneText={"Upload CSV"}
-                maxFileSize={Infinity}
-                style={{}}
-            /></Grid>
+            <Grid item xs = {5} style={{paddingTop: '230px', paddingLeft: '50px'}}>
+              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Button style={{width: '450px', height: '85px', fontSize: '32px', color: 'white', background: 'orange'}} sx={{ borderRadius: 5 }} variant="contained">Generate Bill</Button>
+              </div>
+              
+              
+            </Grid>
             <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
             </Grid>
             </Grid>
