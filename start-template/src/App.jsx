@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import {AppBar, CssBaseline, Button, Grid, CloudUploadIcon, InputLabel, Toolbar, Typography, TextField, FormControl, MenuItem} from "@mui/material"
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
@@ -69,12 +69,12 @@ const App = () => {
                     </Select>
 
 
-                    <p>Select Level</p>
+                    <p>Select Vendor Level</p>
                     <Select
                         labelId="level-select-label"
                         id="level-select-label"
                         value={selectedLevel}
-                        label="Select Level"
+                        label="Select Vendor Level"
                         onChange={handleLevelChange}
                     >
                         {levels.map(level => <MenuItem value={level}>Level {level}</MenuItem>)}            

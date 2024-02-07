@@ -9,13 +9,22 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Papa from "papaparse"
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import MuiInput from '@mui/material/Input';
+import { styled } from '@mui/material/styles';
+//import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+//import { useDemoData } from '@mui/x-data-grid-generator';
+
+
 
 const App = () => {
     const [age, setAge] = React.useState('');
-    const [level, setLevel] = React.useState('Select Level');
-    const [vendor, setVendor] = React.useState('Select Vendor');
+    const [level, setLevel] = React.useState('');
+    const [vendor, setVendor] = React.useState('');
     const [scholarship, setScholarship] = React.useState(0);
     const vendors = ["Vendor 1", "Vendor 2", "Vendor 3", "Vendor 4", "Vendor 5", "Veo", "Variable"]
+    const Input = styled(MuiInput) `width: 52px;`;
+
+
     const handleChange = (event) => {
         setAge(event.target.value);
     };
@@ -31,6 +40,14 @@ const App = () => {
     const handleScholarshipChange = (event) => {
       setScholarship(event.target.value)
     }
+
+    // const handleInputChange = (event) => {
+    //   setScholarship(event.target.value)
+
+    // };
+  
+    
+
 
     const fileAdded = (files) => {
         if (files.length != 0) {
@@ -68,33 +85,28 @@ const App = () => {
                 style={{}}
             /></Grid>
             <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
-            <Box sx={{ minWidth: 120}} style={{height: '100px'}}>
-      <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>{vendor}</InputLabel>
+      <Box sx={{ minWidth: 120}} style={{height: '100px'}}>
+      <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: "100%"}} fullWidth>
+      <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}></InputLabel>
         <Autocomplete
-        id="autocomplete-input"
-        options={vendors}
-        renderInput={(params) => (
-          <TextField {...params} label="Vendors" variant="outlined" />
-        )}
-      />
-      
-          <MenuItem value={"Vendor 1"}>Vendor 1</MenuItem>
-          <MenuItem value={"Vendor 2"}>Vendor 2</MenuItem>
-          <MenuItem value={"Vendor 3"}>Vendor 3</MenuItem>
-          <MenuItem value={"Vendor 4"}>Vendor 4</MenuItem>
+          disablePortal
+          id="combo-box-demo"
+          options={vendors}
+          sx={{ color: 'black', height: '100%', width: 783, paddingTop: '12px', fontSize: '30px' }}
+          renderInput={(params) => <TextField {...params} label="Select Vendor" />}
+        />
       </FormControl>
     </Box>
     <Box sx={{ minWidth: 120}} style={{height: '100px', marginTop: '50px'}}>
       <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>{level}</InputLabel>
+        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Level</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
           id="demo-simple-select-required"
-          value={""}
-          label="Vendor"
+          value={level}
           onChange={handleChangeLevel}
           style={{height: '100%', paddingLeft: '20px', fontSize: '20px', paddingTop: '20px'}}
+      
         >
           <MenuItem value={"Level 1"}>Level 1</MenuItem>
           <MenuItem value={"Level 2"}>Level 2</MenuItem>
@@ -102,18 +114,19 @@ const App = () => {
         </Select>
       </FormControl>
     </Box>
+
     <Box className={"sliderBox"}>
             <FormControl variant="filled" style={{background: 'white', borderRadius: '20px'}} fullWidth>
               <div  className="slider-container">
-                <InputLabel id="demo-simple-select-required-label-scholarship" style={{color: 'black', fontSize: '30px', paddingTop: '25px', paddingLeft: '25px'}}>Scholarship</InputLabel>
-                <Slider className={"slider-slide"} value={scholarship} onChange={handleScholarshipChange} step={10} marks min={0} max={100} labelId={"demo-simple-select-required-label-scholarship"}/>
+                <p id="demo-simple-select-required-label-scholarship" style={{color: 'black', fontSize: '20px'}}>Scholarship</p>
+                <Slider className={"slider-slide"} value={scholarship} onChange={handleScholarshipChange} step={10} default={10} marks min={0} max={100} valueLabelDisplay="auto" labelId={"demo-simple-select-required-label-scholarship"}/>
+                <Input value={scholarship} size="small" onChange={handleScholarshipChange} inputProps = {{step: 10, min: 0, max: 100, type: 'number', 'aria-labelledby':' input-slider'}} />
               </div>
             </FormControl>
     </Box>
 
-            </Grid>
-            </Grid>
-
+        </Grid>
+        </Grid>
       </>
     );
 }
