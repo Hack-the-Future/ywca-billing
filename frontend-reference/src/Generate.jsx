@@ -12,7 +12,19 @@ import Papa from "papaparse";
 const Generate = () => {
     (
         <>
-        
+        <div style={{height: '100vh', background: '#1E1E1E'}}>
+            <Grid container style={{height: '100%', background: "#1E1E1E"}}>
+            <Grid item xs = {5} style={{paddingTop: '230px', paddingLeft: '50px'}}><DropzoneArea
+                filesLimit={1}
+                acceptedFiles={['text/csv']}
+                dropzoneText={"Upload CSV"}
+                maxFileSize={Infinity}
+                style={{}}
+            /></Grid>
+            <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
+            </Grid>
+            </Grid>
+        </div>
         </>
     );
 }
