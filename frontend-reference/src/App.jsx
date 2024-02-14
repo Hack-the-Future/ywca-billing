@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, CssBaseline, Grid, Toolbar, Typography} from "@mui/material"
+import {AppBar, CssBaseline, Grid, Toolbar, Typography, Button} from "@mui/material"
 import {DropzoneArea} from 'material-ui-dropzone'
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -45,7 +45,6 @@ const App = () => {
                         <Grid item xs = {9} style={{justify: 'center'}}><img src={ require('./ywca-logo.jpg')} style={{height: '140px'}}></img></Grid>
                         <Grid item xs = {3} style={{background: 'orange', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px'}}><h1>Billing</h1></Grid>
                     </Grid>
-
                 </Toolbar>
             </AppBar>
             <Grid container style={{height: '100vh', background: "#1E1E1E"}}>
@@ -97,14 +96,15 @@ const App = () => {
         </>
         <div style={{height: '100vh', background: '#1E1E1E'}}>
             <Grid container style={{height: '100%', background: "#1E1E1E"}}>
-            <Grid item xs = {5} style={{paddingTop: '230px', paddingLeft: '50px'}}><DropzoneArea
-                filesLimit={1}
-                acceptedFiles={['text/csv']}
-                dropzoneText={"Upload CSV"}
-                maxFileSize={Infinity}
-                style={{}}
-            /></Grid>
-            <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingLeft: '50px', paddingTop: '230px'}}>
+              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '220px'}}>
+                <Button style={{width: '450px', height: '85px', fontSize: '32px', color: 'white', background: 'orange'}} sx={{ borderRadius: 5 }} variant="contained">Generate Bill</Button>
+              </div>
+            </Grid>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
+              <div style={{background: 'white', borderRadius: '25px', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h1 style={{color: 'grey'}}>Bill Preview</h1>
+              </div>
             </Grid>
             </Grid>
         </div>

@@ -8,6 +8,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: auto;
+}
+
 .MuiDropzoneArea-root {
   width: 100%;
   border: dashed;
