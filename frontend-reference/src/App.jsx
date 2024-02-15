@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, CssBaseline, Grid, Toolbar, Typography} from "@mui/material"
+import {AppBar, CssBaseline, Grid, Toolbar, Typography, Button} from "@mui/material"
 import {DropzoneArea} from 'material-ui-dropzone'
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -7,6 +7,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Papa from "papaparse";
+import Generate from "./Generate";
+import { MdOutlineFileDownload } from "react-icons/md";
+import { FaShareSquare } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
 
 
 const App = () => {
@@ -34,6 +39,7 @@ const App = () => {
     }
 
     return (
+      <>
         <>
             <CssBaseline />
             <AppBar>
@@ -42,7 +48,6 @@ const App = () => {
                         <Grid item xs = {9} style={{justify: 'center'}}><img src={ require('./ywca-logo.jpg')} style={{height: '140px'}}></img></Grid>
                         <Grid item xs = {3} style={{background: 'orange', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px'}}><h1>Billing</h1></Grid>
                     </Grid>
-
                 </Toolbar>
             </AppBar>
             <Grid container style={{height: '100vh', background: "#1E1E1E"}}>
@@ -92,7 +97,39 @@ const App = () => {
             </Grid>
             </Grid>
         </>
+        <div style={{height: '100vh', background: '#1E1E1E'}}>
+            <Grid container style={{height: '100%', background: "#1E1E1E"}}>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingLeft: '50px', paddingTop: '230px'}}>
+              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '220px'}}>
+                <Button style={{width: '450px', height: '100px', fontSize: '32px', fontFamily: "Noto Sans", color: 'white', background: 'orange', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Generate Bill</Button>
+              </div>
+            </Grid>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
+              <div style={{background: 'white', borderRadius: '25px', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h1 style={{color: 'grey'}}>CSV Preview</h1>
+              </div>
+            </Grid>
+            </Grid>
+        </div>
+        <div style={{height: '100vh', background: '#1E1E1E'}}>
+            <Grid container style={{height: '100%', background: "#1E1E1E"}}>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingLeft: '50px', paddingTop: '300px'}}>
+              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '70px', flexDirection: 'column'}}>
+                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'orange', background: 'white', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Download Bill <div style={{paddingLeft: "10px", paddingTop: "8px"}}><FaDownload /></div></Button>
+                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'orange', background: 'white', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Share Bill <div style = {{paddingLeft: "10px", paddingTop: "8px"}}><FaShareAlt /></div></Button>
+                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'grey', background: '#1E1E1E', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="outlined">Generate new bill</Button>
+              </div>
+            </Grid>
+            <Grid item xs = {6} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
+              <div style={{background: 'white', borderRadius: '25px', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h1 style={{color: 'grey'}}>Bill Preview</h1>
+              </div>
+            </Grid>
+            </Grid>
+        </div>
+        </>
     );
+    
 }
 
 export default App;
