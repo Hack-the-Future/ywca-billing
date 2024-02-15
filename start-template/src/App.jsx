@@ -1,6 +1,7 @@
  import React from "react";
 import {AppBar, CssBaseline, Button, Grid, CloudUploadIcon, InputLabel, Toolbar, Typography, TextField, FormControl, MenuItem} from "@mui/material"
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from "axios";
 
 const App = () => {
     
@@ -30,7 +31,8 @@ const App = () => {
     
     const handleClick = (event) => {
         alert("File upload successful!")
-        //setSelectedFile(event.target.value);
+        // selectedFile now contains the array of files passed in from event.target.value
+        setSelectedFile(event.target.value);
         return(
             <MenuItem>selectedFile</MenuItem>
         )

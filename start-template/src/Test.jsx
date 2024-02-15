@@ -11,12 +11,14 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from '@mui/material/Paper';
+import axios from "axios";
 //import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 //import { useDemoData } from '@mui/x-data-grid-generator';
 
-
-
 const App = () => {
+    const [file, setFile] = React.useState(null)
     const [age, setAge] = React.useState('');
     const [level, setLevel] = React.useState('');
     const [vendor, setVendor] = React.useState('');
@@ -24,8 +26,44 @@ const App = () => {
     const vendors = ["Vendor 1", "Vendor 2", "Vendor 3", "Vendor 4", "Vendor 5", "Veo", "Variable"]
     const Input = styled(MuiInput) `width: 52px;`;
 
+    React.useEffect(() => {
+      // this will run ONLY when the file changes
+      if (!file) {
+        return
+      }
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          console.log(results.data)
+          // go through the file and update the vendors and levels
+        },
+      });
 
-    const handleChange = (event) => {
+  }, [file])
+
+  const generateBillCall = async () => {
+      // POST because we want to include files, data, backend will parse this as form data
+
+      let data = new FormData()
+      data.append("vendor", vendor)
+      data.append("level", level)
+      data.append("scholarship", scholarship)
+      data.append("csv", file)
+      
+      axios.post("http://ywcabackend.com/generateBill", data)
+      .then(res => {
+        // process backend response
+
+        // probably response will contain the bill PDF file, update the state with this and display it
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+
+    function handleChange(event) {
         setAge(event.target.value);
     };
 
@@ -37,30 +75,63 @@ const App = () => {
         setVendor(event.target.value)
     }
 
-    const handleScholarshipChange = (event) => {
+    function handleScholarshipChange(event) {
+      
       setScholarship(event.target.value)
+      // if (event.target.value > 100 ){
+      //   setScholarship(100)
+      // } else {
+      //   setScholarship(event.target.value)
+      // } 
+    }
+    const handleInputChange = (event) => {
+      console.log("input received")
+      setFile()
     }
 
-    // const handleInputChange = (event) => {
-    //   setScholarship(event.target.value)
 
-    // };
-  
+    
     
 
+   const useStyles = makeStyles((theme) => ({
+      root: {
+        "& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+          // Default transform is "translate(14px, 20px) scale(1)""
+          // This lines up the label with the initial cursor position in the input
+          // after changing its padding-left.
+          transform: "translate(34px, 20px) scale(1);"
+        },
+        "&.Mui-focused .MuiInputLabel-outlined": {
+          color: "black"
+        }
+      },
+      inputRoot: {
+        color: "purple",
+        // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
+        '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
+          // Default left padding is 6px
+          paddingLeft: 7
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderColor: "black"
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+          borderColor: "black"
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          borderColor: "black"
+        }
+      }
+    }));
 
-    const fileAdded = (files) => {
+  const classes = useStyles();
+
+  
+  const fileAdded = (files) => {
         if (files.length != 0) {
             console.log(files[0])
-            Papa.parse(files[0], {
-                header: true,
-                skipEmptyLines: true,
-                complete: function (results) {
-                  console.log(results.data)
-                },
-              });
-        }
-        
+            setFile(files[0])
+        }   
     }
 
     return (
@@ -90,10 +161,14 @@ const App = () => {
       <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}></InputLabel>
         <Autocomplete
           disablePortal
+          classes={classes}
           id="combo-box-demo"
           options={vendors}
-          sx={{ color: 'black', height: '100%', width: 783, paddingTop: '12px', fontSize: '30px' }}
-          renderInput={(params) => <TextField {...params} label="Select Vendor" />}
+          sx={{ color: 'black', height: '200px', width: '100%', paddingTop: '18px', fontSize: '30px' }}
+          renderInput={(params) => <TextField {...params} label="Select Vendor" sx={{ fontSize: '20px', height: '300px', paddingLeft: '15px', paddingLeft: '0px'}}/>}
+          PaperComponent={(props) => (
+            <Paper {...props} className={classes.paper} />
+          )}
         />
       </FormControl>
     </Box>
@@ -119,8 +194,9 @@ const App = () => {
             <FormControl variant="filled" style={{background: 'white', borderRadius: '20px'}} fullWidth>
               <div  className="slider-container">
                 <p id="demo-simple-select-required-label-scholarship" style={{color: 'black', fontSize: '20px'}}>Scholarship</p>
-                <Slider className={"slider-slide"} value={scholarship} onChange={handleScholarshipChange} step={10} default={10} marks min={0} max={100} valueLabelDisplay="auto" labelId={"demo-simple-select-required-label-scholarship"}/>
-                <Input value={scholarship} size="small" onChange={handleScholarshipChange} inputProps = {{step: 10, min: 0, max: 100, type: 'number', 'aria-labelledby':' input-slider'}} />
+                <Slider className={"slider-slide"} value={scholarship} onChange={handleScholarshipChange} step={10} default={10} min={0} max={100} valueLabelDisplay="auto" labelId={"demo-simple-select-required-label-scholarship"}/>
+                <TextField value={scholarship} size="small" onChange={handleScholarshipChange} InputLabelProps={{shrink: true,}} />
+                <Input value={scholarship} size="small" onChange={handleScholarshipChange}/>
               </div>
             </FormControl>
     </Box>
@@ -128,7 +204,7 @@ const App = () => {
         </Grid>
         </Grid>
       </>
-    );
+    )
 }
 
 export default App;
