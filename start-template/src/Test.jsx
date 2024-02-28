@@ -26,6 +26,8 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { FaShareSquare } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import { FaShareAlt } from "react-icons/fa";
+import { MdNavigateNext } from "react-icons/md";
+import { AttachFile } from '@material-ui/icons';
 //import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 //import { useDemoData } from '@mui/x-data-grid-generator';
 
@@ -83,6 +85,18 @@ const App = () => {
       });
   };
 
+  const newBill = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cont = () => {
+    window.scrollTo({ top: "855", behavior: "smooth" });
+  };
+
+  const moveToEnd = () => {
+    window.scrollTo({ top: "1760", behavior: "smooth" });
+  };
+
   function handleChange(event) {
     setAge(event.target.value);
   }
@@ -96,7 +110,6 @@ const App = () => {
     setVendor(event.target.value);
     console.log(vendor);
   };
-  
 
   const Newlabl = "Line1\nLine2";
 
@@ -129,17 +142,17 @@ const App = () => {
         background: "transparent",
         opacity: "0",
         fontSize: "30px",
-        display: 'none',
-        top: '0'
+        display: "none",
+        top: "0",
       },
     },
     inputRoot: {
       color: "black",
-      '& legend': {
-        display: 'none'
+      "& legend": {
+        display: "none",
       },
-      '& fieldset': {
-        top: '0'
+      "& fieldset": {
+        top: "0",
       },
       // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
       '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
@@ -201,9 +214,10 @@ const App = () => {
       <Grid container style={{ height: "100vh", background: "#1E1E1E" }}>
         <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
           <DropzoneArea
+            Icon={AttachFile}
             filesLimit={1}
             acceptedFiles={["text/csv"]}
-            dropzoneText={"Upload CSV"}
+            dropzoneText={"Upload CSV File"}
             onChange={fileAdded}
             maxFileSize={Infinity}
             style={{}}
@@ -217,9 +231,7 @@ const App = () => {
             paddingRight: "50px",
             paddingLeft: "50px",
           }}
-        
         >
-
           <FormControl
             variant="filled"
             style={{
@@ -227,7 +239,6 @@ const App = () => {
               height: "130px",
             }}
             fullWidth
-
           >
             {/* Styling for this is in CSS file */}
             <Autocomplete
@@ -242,17 +253,16 @@ const App = () => {
               }}
               renderInput={(params) => (
                 <div>
-   
-                <TextField
-                label="Select Vendor"
-                InputLabelProps={{fontSize:"40px"}}
-                  sx={{
-                    height: "300px",
-                    paddingLeft: "15px",
-                    paddingLeft: "0px",
-                  }}
-                  {...params}
-                />
+                  <TextField
+                    label="Select Vendor"
+                    InputLabelProps={{ fontSize: "40px" }}
+                    sx={{
+                      height: "300px",
+                      paddingLeft: "15px",
+                      paddingLeft: "0px",
+                    }}
+                    {...params}
+                  />
                 </div>
               )}
               PaperComponent={(props) => (
@@ -261,10 +271,10 @@ const App = () => {
             />
           </FormControl>
 
-
           <Box
             sx={{ minWidth: 120 }}
-            style={{ height: "100px", marginTop: "60px" }}
+            style={{ height: "100px", marginTop: "20px", }}
+            
           >
             <FormControl
               variant="filled"
@@ -272,6 +282,7 @@ const App = () => {
                 background: "white",
                 borderRadius: "20px",
                 height: "100%",
+                background: "white"
               }}
               fullWidth
             >
@@ -283,6 +294,7 @@ const App = () => {
                   height: "100%",
                   paddingTop: "12px",
                   paddingLeft: "25px",
+                  
                 }}
               >
                 Select Level
@@ -311,7 +323,7 @@ const App = () => {
             sx={{ minWidth: 120 }}
             style={{
               height: "165px",
-              marginTop: "93px",
+              marginTop: "53px",
               borderRadius: "20px",
               background: "white",
             }}
@@ -329,6 +341,7 @@ const App = () => {
                   color: "black",
                   fontSize: "30px",
                   paddingLeft: "20px",
+                  background: "white"
                 }}
               >
                 Scholarship (%){" "}
@@ -341,6 +354,7 @@ const App = () => {
                     paddingLeft: "20px",
                     border: "30px",
                     borderColor: "black",
+                    background: "white"
                   }}
                 />
               </p>
@@ -368,6 +382,30 @@ const App = () => {
               />
             </div>
           </Box>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <Button
+                onClick={cont}
+                style={{
+                  marginTop: "53px",
+                  width: "450px",
+                  height: "50px",
+                  fontSize: "30px",
+                  color: "white",
+                  background: "orange",
+                  textTransform: "none",
+                  letterSpacing: "normal",
+                  fontWeight: "bold",
+                }}
+                sx={{ borderRadius: 5 }}
+                variant="contained"
+              >
+                Continue{" "}
+                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                <MdNavigateNext style={{marginTop: "10px"}} />
+                </div>
+              </Button>
+            </div>
+          
 
           {/*<Box className={"sliderBox"}>
             <FormControl
@@ -417,36 +455,173 @@ const App = () => {
           </Box>*/}
         </Grid>
       </Grid>
-      <div style={{height: '100vh', background: '#1E1E1E'}}>
-            <Grid container style={{height: '100%', background: "#1E1E1E"}}>
-            <Grid item xs = {6} style={{paddingTop: '230px', paddingLeft: '50px', paddingTop: '230px'}}>
-              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '220px'}}>
-                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'white', background: 'orange', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Generate Bill</Button>
-              </div>
-            </Grid>
-            <Grid item xs = {6} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
-              <div style={{background: 'white', borderRadius: '25px', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <h1 style={{color: 'grey'}}>CSV Preview</h1>
-              </div>
-            </Grid>
-            </Grid>
-        </div>
-        <div style={{height: '100vh', background: '#1E1E1E'}}>
-            <Grid container style={{height: '100%', background: "#1E1E1E"}}>
-            <Grid item xs = {6} style={{paddingTop: '230px', paddingLeft: '50px', paddingTop: '300px'}}>
-              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '70px', flexDirection: 'column'}}>
-                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'orange', background: 'white', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Download Bill <div style={{paddingLeft: "10px", paddingTop: "8px"}}><FaDownload /></div></Button>
-                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'orange', background: 'white', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="contained">Share Bill <div style = {{paddingLeft: "10px", paddingTop: "8px"}}><FaShareAlt /></div></Button>
-                <Button style={{width: '450px', height: '100px', fontSize: '32px', color: 'grey', background: '#1E1E1E', textTransform: "none", letterSpacing: "normal", fontWeight: "bold"}} sx={{ borderRadius: 5 }} variant="outlined">Generate new bill</Button>
-              </div>
-            </Grid>
-            <Grid item xs = {6} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
-              <div style={{background: 'white', borderRadius: '25px', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <h1 style={{color: 'grey'}}>Bill Preview</h1>
-              </div>
-            </Grid>
-            </Grid>
-        </div>
+
+      <div style={{ height: "100vh", background: "#1E1E1E" }}>
+        {/* Bill Preview Section */}
+        <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
+          <Grid
+            item
+            xs={6}
+            style={{
+              paddingTop: "230px",
+              paddingLeft: "50px",
+              paddingTop: "230px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: "220px",
+              }}
+            >
+              <Button
+                onClick={moveToEnd}
+                style={{
+                  width: "450px",
+                  height: "100px",
+                  fontSize: "32px",
+                  color: "white",
+                  background: "orange",
+                  textTransform: "none",
+                  letterSpacing: "normal",
+                  fontWeight: "bold",
+                }}
+                sx={{ borderRadius: 5 }}
+                variant="contained"
+              >
+                Generate Bill
+              </Button>
+            </div>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            style={{
+              paddingTop: "230px",
+              paddingRight: "50px",
+              paddingLeft: "50px",
+            }}
+          >
+            <div
+              style={{
+                background: "white",
+                borderRadius: "25px",
+                height: "90%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h1 style={{ color: "grey" }}>CSV Preview</h1>
+            </div>
+          </Grid>
+        </Grid>
+      </div>
+
+      {/* Bill Generate Section */}
+      <div style={{ height: "100vh", background: "#1E1E1E" }}>
+        <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
+          <Grid
+            item
+            xs={6}
+            style={{
+              paddingTop: "230px",
+              paddingLeft: "50px",
+              paddingTop: "300px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "70px",
+                flexDirection: "column",
+              }}
+            >
+              <Button
+                style={{
+                  width: "450px",
+                  height: "100px",
+                  fontSize: "32px",
+                  color: "orange",
+                  background: "white",
+                  textTransform: "none",
+                  letterSpacing: "normal",
+                  fontWeight: "bold",
+                }}
+                sx={{ borderRadius: 5 }}
+                variant="contained"
+              >
+                Download Bill{" "}
+                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                  <FaDownload />
+                </div>
+              </Button>
+              <Button
+                style={{
+                  width: "450px",
+                  height: "100px",
+                  fontSize: "32px",
+                  color: "orange",
+                  background: "white",
+                  textTransform: "none",
+                  letterSpacing: "normal",
+                  fontWeight: "bold",
+                }}
+                sx={{ borderRadius: 5 }}
+                variant="contained"
+              >
+                Share Bill{" "}
+                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                  <FaShareAlt />
+                </div>
+              </Button>
+              <Button
+                style={{
+                  width: "450px",
+                  height: "100px",
+                  fontSize: "32px",
+                  color: "grey",
+                  background: "#1E1E1E",
+                  textTransform: "none",
+                  letterSpacing: "normal",
+                  fontWeight: "bold",
+                }}
+                sx={{ borderRadius: 5 }}
+                variant="outlined"
+                onClick={newBill}
+              >
+                Generate new bill
+              </Button>
+            </div>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            style={{
+              paddingTop: "230px",
+              paddingRight: "50px",
+              paddingLeft: "50px",
+            }}
+          >
+            <div
+              style={{
+                background: "white",
+                borderRadius: "25px",
+                height: "90%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h1 style={{ color: "grey" }}>Bill Preview</h1>
+            </div>
+          </Grid>
+        </Grid>
+      </div>
     </>
   );
 };

@@ -39,11 +39,11 @@ body {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
-    min-height: 250px;
+    min-height: 260px;
     border-radius: 25px !important;
     border-color: rgba(0, 0, 0, 0.12);
     background-color: #fff;
-    height: 65vh;
+    height: 67vh;
   }
   
   .MuiDropzoneArea-text {
