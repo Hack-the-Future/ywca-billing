@@ -28,6 +28,9 @@ import { FaDownload } from "react-icons/fa";
 import { FaShareAlt } from "react-icons/fa";
 import { MdNavigateNext } from "react-icons/md";
 import { AttachFile } from '@material-ui/icons';
+import CsvInput from "./CsvInput";
+import CsvInterface from "./CsvInterface";
+import CsvViewer from "react-csv-viewer";
 //import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 //import { useDemoData } from '@mui/x-data-grid-generator';
 
@@ -37,33 +40,42 @@ const App = () => {
   const [level, setLevel] = React.useState("");
   const [vendor, setVendor] = React.useState("");
   const [scholarship, setScholarship] = React.useState(0);
-  const vendors = [
-    "Vendor 1",
-    "Vendor 2",
-    "Vendor 3",
-    "Vendor 4",
-    "Vendor 5",
-    "Veo",
-    "Variable",
-  ];
+  const [vendors, setVendors] = React.useState([]);
+  const [contacts, setContacts] = React.useState([]);
+  const [phone_nums, setPhoneNums] = React.useState([]);
   const Input = styled(MuiInput)`
     width: 52px;
   `;
 
   React.useEffect(() => {
     // this will run ONLY when the file changes
+
     if (!file) {
       return;
     }
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: function (results) {
         console.log(results.data);
+
         // go through the file and update the vendors and levels
+        setContacts(results.data.map(entry=>entry.Name_of_contact))
+        console.log(contacts)
+        
+        setVendors(results.data.map(entry => entry.Name_of_vendor))
+        console.log(vendors)
+
+        setPhoneNums(results.data.map(entry => entry.Phone))
+        console.log(phone_nums)
       },
     });
   }, [file]);
+
+  // for conditional rendering the lower sections, if true the section renders
+  const [selectionsComplete, setSelectionsComplete] = React.useState(false)
+  const [generateComplete, setGenerateComplete]  = React.useState(false)
 
   const generateBillCall = async () => {
     // POST because we want to include files, data, backend will parse this as form data
@@ -115,15 +127,17 @@ const App = () => {
 
   function handleScholarshipChange(event) {
     setScholarship(event.target.value);
-    // if (event.target.value > 100 ){
-    //   setScholarship(100)
-    // } else {
-    //   setScholarship(event.target.value)
-    // }
+    /*if (event.target.value < 0 || event.target.value > 100) {
+      value = 0;
+      setScholarship(100)
+    } else {
+      setScholarship(event.target.value)
+    }*/
   }
+  
   const handleInputChange = (event) => {
     console.log("input received");
-    setFile();
+    //setFile();
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -174,12 +188,27 @@ const App = () => {
 
   const classes = useStyles();
 
-  const fileAdded = (files) => {
+  /*const fileAdded = (files) => {
+    let file = files[0];
+
+    setVendor("")
+    setScholarship(0)
+    setLevel(0)
+    setVendors([])
+
+    if (file) {
+      if (!file.name.endsWith('.csv')) {
+        console.log('Please select only CSV files');
+      }
+    } else {
+      console.log('Please select your file');
+    }
+    
     if (files.length != 0) {
       console.log(files[0]);
       setFile(files[0]);
     }
-  };
+  };*/
 
   return (
     <>
@@ -212,7 +241,7 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Grid container style={{ height: "100vh", background: "#1E1E1E" }}>
-        <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
+        {/*<Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
           <DropzoneArea
             Icon={AttachFile}
             filesLimit={1}
@@ -220,9 +249,12 @@ const App = () => {
             dropzoneText={"Upload CSV File"}
             onChange={fileAdded}
             maxFileSize={Infinity}
-            style={{}}
-          />
-        </Grid>
+            style={{}} 
+            />
+            </Grid>*/}
+          <div>
+            <CsvInterface />
+          </div>
         <Grid
           item
           xs={7}
@@ -244,9 +276,12 @@ const App = () => {
             <Autocomplete
               onChange={handleChangeVendor}
               disablePortal
+              value={vendor}
               classes={classes}
               id="combo-box-demo"
+              disabled={!vendors.length}
               options={vendors}
+              isOptionEqualToValue={(one, two) => one == two}
               sx={{
                 color: "black",
                 fontSize: "30px",
@@ -384,7 +419,7 @@ const App = () => {
           </Box>
             <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
             <Button
-                onClick={cont}
+                onClick={() => {setSelectionsComplete(true); newBill()}}
                 style={{
                   marginTop: "53px",
                   width: "450px",
@@ -399,7 +434,7 @@ const App = () => {
                 sx={{ borderRadius: 5 }}
                 variant="contained"
               >
-                Continue{" "}
+                View Bill {" "}
                 <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
                 <MdNavigateNext style={{marginTop: "10px"}} />
                 </div>
@@ -407,7 +442,7 @@ const App = () => {
             </div>
           
 
-          {/*<Box className={"sliderBox"}>
+          <Box className={"sliderBox"}>
             <FormControl
               variant="filled"
               style={{
@@ -452,11 +487,12 @@ const App = () => {
                 />
               </div>
             </FormControl>
-          </Box>*/}
+          </Box>
         </Grid>
       </Grid>
 
-      <div style={{ height: "100vh", background: "#1E1E1E" }}>
+      
+      {selectionsComplete && <div style={{ height: "100vh", background: "#1E1E1E" }}>
         {/* Bill Preview Section */}
         <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
           <Grid
@@ -476,8 +512,8 @@ const App = () => {
                 paddingTop: "220px",
               }}
             >
-              <Button
-                onClick={moveToEnd}
+              /<Button
+                onClick={() => {setGenerateComplete(true); moveToEnd()}}
                 style={{
                   width: "450px",
                   height: "100px",
@@ -515,13 +551,14 @@ const App = () => {
               }}
             >
               <h1 style={{ color: "grey" }}>CSV Preview</h1>
+              <CsvViewer />
             </div>
           </Grid>
         </Grid>
-      </div>
+      </div> }
 
       {/* Bill Generate Section */}
-      <div style={{ height: "100vh", background: "#1E1E1E" }}>
+      { selectionsComplete && generateComplete && <div style={{ height: "100vh", background: "#1E1E1E" }}>
         <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
           <Grid
             item
@@ -621,7 +658,7 @@ const App = () => {
             </div>
           </Grid>
         </Grid>
-      </div>
+      </div>}
     </>
   );
 };
