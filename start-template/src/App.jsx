@@ -14,7 +14,7 @@ const App = () => {
     const [notesText, setNotesText] = React.useState('')
 
     const handleFileChange = (event) => {
-        setSelectedFile(event.target.files);
+       // setSelectedFile(event.target.files);
     }
     
     const handleLevelChange = (event) => {
@@ -54,7 +54,7 @@ const App = () => {
 
             <FormControl fullWidth>
                 <div className="flex-box">
-                <div>
+                <div style={{width: '30%'}}>
                     <TextField type="file" files={selectedFile} onChange={handleFileChange}>Upload CSV File</TextField>
                 </div>
 
@@ -88,7 +88,7 @@ const App = () => {
 
                 <Button variant="contained" color="primary" component="span" onClick={(e) => handleClick(e.target.files)}>
                     Upload
-                </Button>
+    </Button>
                 
             </FormControl>
             </main>

@@ -252,9 +252,13 @@ const App = () => {
             style={{}} 
             />
             </Grid>*/}
-          <div>
+            <Grid item xs ={5} style={{ paddingTop: "230px", paddingLeft: "50px"}}>
             <CsvInterface />
-          </div>
+            </Grid>
+
+
+            
+
         <Grid
           item
           xs={7}
@@ -442,7 +446,7 @@ const App = () => {
             </div>
           
 
-          <Box className={"sliderBox"}>
+          {/*<Box className={"sliderBox"}>
             <FormControl
               variant="filled"
               style={{
@@ -487,7 +491,7 @@ const App = () => {
                 />
               </div>
             </FormControl>
-          </Box>
+                </Box>*/}
         </Grid>
       </Grid>
 
