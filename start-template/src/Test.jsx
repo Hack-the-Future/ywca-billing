@@ -38,6 +38,7 @@ const App = () => {
   const [file, setFile] = React.useState(null);
   const [age, setAge] = React.useState("");
   const [level, setLevel] = React.useState("");
+  const [vendorLevel, setVendorLevel] = React.useState([])
   const [vendor, setVendor] = React.useState("");
   const [scholarship, setScholarship] = React.useState(0);
   const [vendors, setVendors] = React.useState([]);
@@ -47,12 +48,13 @@ const App = () => {
     width: 52px;
   `;
 
-  React.useEffect(() => {
-    // this will run ONLY when the file changes
+  function csvInputChange(files) {
 
-    if (!file) {
+    if (!files || files.length == 0) {
       return;
     }
+    const file = files[0]
+    console.log(file)
 
     Papa.parse(file, {
       header: true,
@@ -61,17 +63,18 @@ const App = () => {
         console.log(results.data);
 
         // go through the file and update the vendors and levels
-        setContacts(results.data.map(entry=>entry.Name_of_contact))
+        setContacts(results.data.map(entry=>entry.Contact_Name))
         console.log(contacts)
         
-        setVendors(results.data.map(entry => entry.Name_of_vendor))
+        setVendors(results.data.map((entry, i) => { return {label: entry.Vendor_name, value: i}}))
         console.log(vendors)
+
+	setVendorLevel(results.data.map(entry => entry.Level))
 
         setPhoneNums(results.data.map(entry => entry.Phone))
         console.log(phone_nums)
       },
-    });
-  }, [file]);
+    })};
 
   // for conditional rendering the lower sections, if true the section renders
   const [selectionsComplete, setSelectionsComplete] = React.useState(false)
@@ -119,8 +122,10 @@ const App = () => {
 
   const handleChangeVendor = (event, value) => {
     console.log(value);
-    setVendor(event.target.value);
+    setVendor(value.label);
+    setLevel(vendorLevel[value.value])
     console.log(vendor);
+    console.log(level);
   };
 
   const Newlabl = "Line1\nLine2";
@@ -253,7 +258,7 @@ const App = () => {
             />
             </Grid>*/}
             <Grid item xs ={5} style={{ paddingTop: "230px", paddingLeft: "50px"}}>
-            <CsvInterface />
+            <CsvInterface handleFileChange={csvInputChange} />
             </Grid>
 
 
@@ -310,59 +315,11 @@ const App = () => {
             />
           </FormControl>
 
-          <Box
-            sx={{ minWidth: 120 }}
-            style={{ height: "100px", marginTop: "20px", }}
-            
-          >
-            <FormControl
-              variant="filled"
-              style={{
-                background: "white",
-                borderRadius: "20px",
-                height: "100%",
-                background: "white"
-              }}
-              fullWidth
-            >
-              <InputLabel
-                id="demo-simple-select-required-label"
-                style={{
-                  color: "black",
-                  fontSize: "30px",
-                  height: "100%",
-                  paddingTop: "12px",
-                  paddingLeft: "25px",
-                  
-                }}
-              >
-                Select Level
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-required-label"
-                id="demo-simple-select-required"
-                value={level}
-                onChange={handleChangeLevel}
-                style={{
-                  height: "100%",
-                  paddingLeft: "20px",
-                  fontSize: "20px",
-                  paddingTop: "20px",
-                }}
-              >
-                <MenuItem value={"Level 1"}>Level 1</MenuItem>
-                <MenuItem value={"Level 2"}>Level 2</MenuItem>
-                <MenuItem value={"Level 3"}>Level 3</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
           {/* Moved the slider next to the label, and changed the slider color. */}
           <Box
             sx={{ minWidth: 120 }}
             style={{
               height: "165px",
-              marginTop: "53px",
               borderRadius: "20px",
               background: "white",
             }}

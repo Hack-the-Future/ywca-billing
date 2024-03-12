@@ -4,7 +4,7 @@ import {
   } from "@mui/material";
   import { DropzoneArea } from "material-ui-dropzone";
   import { AttachFile } from '@material-ui/icons';
-function CsvInput({ handleFileChange }) {
+function CsvInput(props) {
   const csvRef = useRef(null);
 
   {/*const handleChange = e => {
@@ -22,7 +22,7 @@ function CsvInput({ handleFileChange }) {
             filesLimit={1}
             acceptedFiles={["text/csv"]}
             dropzoneText={"Upload CSV File"}
-            //onChange={handleChange}
+            onChange={props.handleFileChange}
             maxFileSize={Infinity}
             style={{}} 
             />
