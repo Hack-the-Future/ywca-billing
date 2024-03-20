@@ -115,6 +115,13 @@ const App = () => {
     window.scrollTo({ top: "1760", behavior: "smooth" });
   };
 
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth"
+    });
+  }
+
   function handleChange(event) {
     setAge(event.target.value);
   }
@@ -250,7 +257,7 @@ const App = () => {
       </AppBar>
       <Grid container style={{ height: "100vh", background: "#1E1E1E" }}>
         <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
-          <CsvInterface handleFileChange={csvInputChange} />
+          <CsvInterface handleFileChange={file} />
         </Grid>
         <Grid
           item
@@ -378,8 +385,7 @@ const App = () => {
                 {
                   setSelectionsComplete(true);
                   fileAdded(true);
-                  //window.scrollTo({ bottom: 1000, behavior: "smooth" });
-                  window.scrollToBottom({behavior: 'smooth'});
+                  scrollToBottom();
                 }
               }}
               style={{
