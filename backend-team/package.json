@@ -1,20 +1,17 @@
 {
   "name": "backend-team",
   "version": "1.0.0",
-  "description": "",
   "main": "csv_parse.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Swara Savagaonkar, Ben Connelly, Melody Wang",
   "license": "ISC",
-
   "dependencies": {
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0", 
+    "react-dom": "^18.2.0",
     "type": "module"
-  }
-  
+  },
+  "description": ""
 }
-

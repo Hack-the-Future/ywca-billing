@@ -1,6 +1,3 @@
-.font-link {
-    font-family: 'Noto Sans Oriya', cursive;
-}
 
 .div.verticalSpace {
     clear: both;
@@ -15,8 +12,10 @@
 .slider-container {
   background: rgb(240, 240, 240);
   border-radius: 50px;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   height: 10rem;
+  display: block;
 }
 
 .slider-slide {
@@ -40,11 +39,11 @@ body {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
-    min-height: 250px;
+    min-height: 260px;
     border-radius: 25px !important;
     border-color: rgba(0, 0, 0, 0.12);
     background-color: #fff;
-    height: 65vh;
+    height: 67vh;
   }
   
   .MuiDropzoneArea-text {
@@ -76,8 +75,32 @@ body {
 
 .sliderBox {
   padding-top: 20px;
-  height: 70px;
+  height: 50px;
 }
-  
+
+.MuiAutocomplete-hasPopupIcon.css-c86hsv-MuiAutocomplete-root .MuiOutlinedInput-root, .MuiAutocomplete-hasClearIcon.css-c86hsv-MuiAutocomplete-root .MuiOutlinedInput-root {
+  padding-right: 39px;
+  height: 33%;
+  background: white;
+  border-radius: 20px;
+}
+
+.MuiAutocomplete-hasPopupIcon.css-12it569-MuiAutocomplete-root .MuiOutlinedInput-root, .MuiAutocomplete-hasClearIcon.css-12it569-MuiAutocomplete-root .MuiOutlinedInput-root {
+  padding-right: 39px;
+  height: 33%;
+  background: white;
+  border-radius: 20px;
+}
+
+.makeStyles-root-39 .MuiInputLabel-outlined:not(.MuiInputLabel-shrink) {
+  transform: translate(30px, 33px) scale(1);
+}
+
+.MuiInputLabel-root {
+  font-size: "200px";
+}
+
+
+
 
   

@@ -1,6 +1,7 @@
-import React from "react";
+ import React from "react";
 import {AppBar, CssBaseline, Button, Grid, CloudUploadIcon, InputLabel, Toolbar, Typography, TextField, FormControl, MenuItem} from "@mui/material"
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from "axios";
 
 const App = () => {
     
@@ -13,7 +14,7 @@ const App = () => {
     const [notesText, setNotesText] = React.useState('')
 
     const handleFileChange = (event) => {
-        setSelectedFile(event.target.files);
+       // setSelectedFile(event.target.files);
     }
     
     const handleLevelChange = (event) => {
@@ -30,7 +31,8 @@ const App = () => {
     
     const handleClick = (event) => {
         alert("File upload successful!")
-        //setSelectedFile(event.target.value);
+        // selectedFile now contains the array of files passed in from event.target.value
+        setSelectedFile(event.target.value);
         return(
             <MenuItem>selectedFile</MenuItem>
         )
@@ -52,7 +54,7 @@ const App = () => {
 
             <FormControl fullWidth>
                 <div className="flex-box">
-                <div>
+                <div style={{width: '30%'}}>
                     <TextField type="file" files={selectedFile} onChange={handleFileChange}>Upload CSV File</TextField>
                 </div>
 
@@ -69,12 +71,12 @@ const App = () => {
                     </Select>
 
 
-                    <p>Select Level</p>
+                    <p>Select Vendor Level</p>
                     <Select
                         labelId="level-select-label"
                         id="level-select-label"
                         value={selectedLevel}
-                        label="Select Level"
+                        label="Select Vendor Level"
                         onChange={handleLevelChange}
                     >
                         {levels.map(level => <MenuItem value={level}>Level {level}</MenuItem>)}            
@@ -86,7 +88,7 @@ const App = () => {
 
                 <Button variant="contained" color="primary" component="span" onClick={(e) => handleClick(e.target.files)}>
                     Upload
-                </Button>
+    </Button>
                 
             </FormControl>
             </main>
