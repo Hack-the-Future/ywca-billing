@@ -54,7 +54,6 @@ const App = () => {
     }
     const file = files[0];
     console.log(file);
-
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -379,7 +378,8 @@ const App = () => {
                 {
                   setSelectionsComplete(true);
                   fileAdded(true);
-                  window.scrollTo({ bottom: 1000, behavior: "smooth" });
+                  //window.scrollTo({ bottom: 1000, behavior: "smooth" });
+                  window.scrollToBottom({behavior: 'smooth'});
                 }
               }}
               style={{
