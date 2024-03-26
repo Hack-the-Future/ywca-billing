@@ -8,6 +8,8 @@ import {
   Slider,
   Button,
 } from "@mui/material";
+import toast, { Toaster } from 'react-hot-toast';
+import "react-table-6/react-table.css";
 import { DropzoneArea } from "material-ui-dropzone";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -15,6 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Papa from "papaparse";
+import ReactTable from "react-table-6";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import MuiInput from "@mui/material/Input";
@@ -54,8 +57,9 @@ const App = () => {
     if (!files || files.length == 0) {
       return;
     }
-    const file = files[0];
+    const file = Papa.unparse(files.data);
     console.log(file);
+    setFile(file);
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -80,6 +84,34 @@ const App = () => {
       },
     });
   }
+
+  const [data, setData] = React.useState([]);
+  const [columns, setColumns] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (data.length && columns.length) setLoading(false);
+  }, [data, columns]);
+
+  const handleFileChange = (file) => {
+    Papa.parse(file, {
+      header: true,
+      dynamicTyping: true,
+      complete: handleDataChange,
+    });
+  };
+
+  const makeColumns = (rawColumns) => {
+    return rawColumns.map((column) => {
+      return { Header: column, accessor: column };
+    });
+  };
+
+  const handleDataChange = (file) => {
+    setData(file.data);
+    setColumns(makeColumns(file.meta.fields));
+    csvInputChange(file);
+  };
 
   // for conditional rendering the lower sections, if true the section renders
   const [selectionsComplete, setSelectionsComplete] = React.useState(false);
@@ -152,10 +184,6 @@ const App = () => {
     }*/
   }
 
-  const handleInputChange = (event) => {
-    console.log("input received");
-    //setFile();
-  };
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -260,7 +288,21 @@ const App = () => {
       </AppBar>
       <Grid container style={{ height: "100vh", background: "#1E1E1E" }}>
         <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
-          <CsvInterface handleFileChange={file} />
+        <div>
+      {loading ? (
+        // Display CsvInput while data is loading or not yet available
+        <CsvInput handleFileChange={handleFileChange} />
+      ) : (
+        // Once loading is false, display the ReactTable with the parsed data
+        <ReactTable
+          data={data}
+          columns={columns}
+          defaultPageSize={15}
+          className="-striped -highlight"
+          style={{ background: 'white', borderRadius: '30px' }}
+        />
+      )}
+    </div>
         </Grid>
         <Grid
           item
@@ -386,9 +428,18 @@ const App = () => {
             <Button
               onClick={() => {
                 {
-                  setSelectionsComplete(true);
-                  fileAdded(true);
-                  scrollToBottom();
+                  if (file !== null) {
+                    if (vendor === "") {
+                      toast.error("Select a vendor!.");
+                    } else {
+                      setSelectionsComplete(true); 
+                      fileAdded(true);
+                      scrollToBottom();
+                    }
+                  } else {
+                    toast.error("Please upload a file!");
+                  }
+                  
                 }
               }}
               style={{
@@ -458,6 +509,10 @@ const App = () => {
               </div>
             </FormControl>
                 </Box>*/}
+            <Toaster
+  position="bottom-center"
+  reverseOrder={false}
+/>
         </Grid>
       </Grid>
 
