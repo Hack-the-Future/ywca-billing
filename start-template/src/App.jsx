@@ -48,6 +48,12 @@ const App = () => {
   const [contacts, setContacts] = React.useState([]);
   const [phone_nums, setPhoneNums] = React.useState([]);
   const [csvData, setCsvData] = React.useState(false);
+  const [hours, setHours] = React.useState([]);
+  const [overtimeHours, setOvertimeHours] = React.useState([]);
+  const [month, setMonth] = React.useState([]);
+  const [dryStorage, setDryStorage] = React.useState([]);
+  const [numFreezers, setNumFreezers] = React.useState([]);
+  const [offseason, setOffseason] = React.useState([]);
 
   const Input = styled(MuiInput)`
     width: 52px;
@@ -182,6 +188,22 @@ const App = () => {
     } else {
       setScholarship(event.target.value)
     }*/
+  }
+
+  const costPreScholarship = 0.0;
+  const totalCost = 0.0;
+
+  function calculateBill() {
+    if (level == 1) {
+      costPreScholarship = (20 * hours) + (10 * (dryStorage / 10)) + (25 * numFreezers);
+      totalCost = costPreScholarship * (1 - (scholarship / 100));
+    } else if (level == 2) {
+      costPreScholarship = 300 + (10  * (dryStorage / 10)) + (25 * numFreezers) + (10 * overtimeHours) + (50 * offseason);
+      totalCost = costPreScholarship * (1 - (scholarship / 100));
+    } else if (level == 3 ) {
+      costPreScholarship = 400 + (10 * (dryStorage / 10)) + (25 * numFreezers) + (8 * overtimeHours) + (50 * offseason);
+      totalCost = costPreScholarship * (1 - (scholarship / 100));
+    }
   }
 
 
