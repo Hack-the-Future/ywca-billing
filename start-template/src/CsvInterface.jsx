@@ -44,6 +44,7 @@ function CsvInterface() {
           columns={columns}
           defaultPageSize={10}
           className="-striped -highlight"
+          style={{ background: 'white' }}
         />
       )}
     </div>
