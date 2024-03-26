@@ -27,7 +27,7 @@ import { FaShareSquare } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import { FaShareAlt } from "react-icons/fa";
 import { MdNavigateNext } from "react-icons/md";
-import { AttachFile } from '@material-ui/icons';
+import { AttachFile } from "@material-ui/icons";
 import CsvInput from "./CsvInput";
 import CsvInterface from "./CsvInterface";
 import CsvViewer from "react-csv-viewer";
@@ -38,7 +38,7 @@ const App = () => {
   const [file, setFile] = React.useState(null);
   const [age, setAge] = React.useState("");
   const [level, setLevel] = React.useState("");
-  const [vendorLevel, setVendorLevel] = React.useState([])
+  const [vendorLevel, setVendorLevel] = React.useState([]);
   const [vendor, setVendor] = React.useState("");
   const [scholarship, setScholarship] = React.useState(0);
   const [vendors, setVendors] = React.useState([]);
@@ -49,12 +49,11 @@ const App = () => {
   `;
 
   function csvInputChange(files) {
-
     if (!files || files.length == 0) {
       return;
     }
-    const file = files[0]
-    console.log(file)
+    const file = files[0];
+    console.log(file);
 
     Papa.parse(file, {
       header: true,
@@ -63,22 +62,27 @@ const App = () => {
         console.log(results.data);
 
         // go through the file and update the vendors and levels
-        setContacts(results.data.map(entry=>entry.Contact_Name))
-        console.log(contacts)
-        
-        setVendors(results.data.map((entry, i) => { return {label: entry.Vendor_name, value: i}}))
-        console.log(vendors)
+        setContacts(results.data.map((entry) => entry.Contact_Name));
+        console.log(contacts);
 
-	setVendorLevel(results.data.map(entry => entry.Level))
+        setVendors(
+          results.data.map((entry, i) => {
+            return { label: entry.Vendor_name, value: i };
+          })
+        );
+        console.log(vendors);
 
-        setPhoneNums(results.data.map(entry => entry.Phone))
-        console.log(phone_nums)
+        setVendorLevel(results.data.map((entry) => entry.Level));
+
+        setPhoneNums(results.data.map((entry) => entry.Phone));
+        console.log(phone_nums);
       },
-    })};
+    });
+  }
 
   // for conditional rendering the lower sections, if true the section renders
-  const [selectionsComplete, setSelectionsComplete] = React.useState(false)
-  const [generateComplete, setGenerateComplete]  = React.useState(false)
+  const [selectionsComplete, setSelectionsComplete] = React.useState(false);
+  const [generateComplete, setGenerateComplete] = React.useState(false);
 
   const generateBillCall = async () => {
     // POST because we want to include files, data, backend will parse this as form data
@@ -123,7 +127,7 @@ const App = () => {
   const handleChangeVendor = (event, value) => {
     console.log(value);
     setVendor(value.label);
-    setLevel(vendorLevel[value.value])
+    setLevel(vendorLevel[value.value]);
     console.log(vendor);
     console.log(level);
   };
@@ -139,7 +143,7 @@ const App = () => {
       setScholarship(event.target.value)
     }*/
   }
-  
+
   const handleInputChange = (event) => {
     console.log("input received");
     //setFile();
@@ -226,6 +230,7 @@ const App = () => {
             <Grid item xs={9} style={{ justify: "center" }}>
               <img
                 src={require("./ywca-logo.jpg")}
+                alt="logo"
                 style={{ height: "140px" }}
               ></img>
             </Grid>
@@ -257,12 +262,9 @@ const App = () => {
             style={{}} 
             />
             </Grid>*/}
-            <Grid item xs ={5} style={{ paddingTop: "230px", paddingLeft: "50px"}}>
-            <CsvInterface handleFileChange={csvInputChange} />
-            </Grid>
-
-
-            
+        <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
+          <CsvInterface handleFileChange={csvInputChange} />
+        </Grid>
 
         <Grid
           item
@@ -337,7 +339,7 @@ const App = () => {
                   color: "black",
                   fontSize: "30px",
                   paddingLeft: "20px",
-                  background: "white"
+                  background: "white",
                 }}
               >
                 Scholarship (%){" "}
@@ -350,7 +352,7 @@ const App = () => {
                     paddingLeft: "20px",
                     border: "30px",
                     borderColor: "black",
-                    background: "white"
+                    background: "white",
                   }}
                 />
               </p>
@@ -378,30 +380,38 @@ const App = () => {
               />
             </div>
           </Box>
-            <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Button
-                onClick={() => {setSelectionsComplete(true); newBill()}}
-                style={{
-                  marginTop: "53px",
-                  width: "450px",
-                  height: "50px",
-                  fontSize: "30px",
-                  color: "white",
-                  background: "orange",
-                  textTransform: "none",
-                  letterSpacing: "normal",
-                  fontWeight: "bold",
-                }}
-                sx={{ borderRadius: 5 }}
-                variant="contained"
-              >
-                View Bill {" "}
-                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
-                <MdNavigateNext style={{marginTop: "10px"}} />
-                </div>
-              </Button>
-            </div>
-          
+              onClick={() => {
+                setSelectionsComplete(true);
+                newBill();
+              }}
+              style={{
+                marginTop: "53px",
+                width: "450px",
+                height: "50px",
+                fontSize: "30px",
+                color: "white",
+                background: "orange",
+                textTransform: "none",
+                letterSpacing: "normal",
+                fontWeight: "bold",
+              }}
+              sx={{ borderRadius: 5 }}
+              variant="contained"
+            >
+              View Bill{" "}
+              <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                <MdNavigateNext style={{ marginTop: "10px" }} />
+              </div>
+            </Button>
+          </div>
 
           {/*<Box className={"sliderBox"}>
             <FormControl
@@ -452,174 +462,181 @@ const App = () => {
         </Grid>
       </Grid>
 
-      
-      {selectionsComplete && <div style={{ height: "100vh", background: "#1E1E1E" }}>
-        {/* Bill Preview Section */}
-        <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
-          <Grid
-            item
-            xs={6}
-            style={{
-              paddingTop: "230px",
-              paddingLeft: "50px",
-              paddingTop: "230px",
-            }}
-          >
-            <div
+      {selectionsComplete && (
+        <div style={{ height: "100vh", background: "#1E1E1E" }}>
+          {/* Bill Preview Section */}
+          <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
+            <Grid
+              item
+              xs={6}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingTop: "220px",
+                paddingTop: "230px",
+                paddingLeft: "50px",
+                paddingTop: "230px",
               }}
             >
-              /<Button
-                onClick={() => {setGenerateComplete(true); moveToEnd()}}
+              <div
                 style={{
-                  width: "450px",
-                  height: "100px",
-                  fontSize: "32px",
-                  color: "white",
-                  background: "orange",
-                  textTransform: "none",
-                  letterSpacing: "normal",
-                  fontWeight: "bold",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingTop: "220px",
                 }}
-                sx={{ borderRadius: 5 }}
-                variant="contained"
               >
-                Generate Bill
-              </Button>
-            </div>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            style={{
-              paddingTop: "230px",
-              paddingRight: "50px",
-              paddingLeft: "50px",
-            }}
-          >
-            <div
+                /
+                <Button
+                  onClick={() => {
+                    setGenerateComplete(true);
+                    moveToEnd();
+                  }}
+                  style={{
+                    width: "450px",
+                    height: "100px",
+                    fontSize: "32px",
+                    color: "white",
+                    background: "orange",
+                    textTransform: "none",
+                    letterSpacing: "normal",
+                    fontWeight: "bold",
+                  }}
+                  sx={{ borderRadius: 5 }}
+                  variant="contained"
+                >
+                  Generate Bill
+                </Button>
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={6}
               style={{
-                background: "white",
-                borderRadius: "25px",
-                height: "90%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                paddingTop: "230px",
+                paddingRight: "50px",
+                paddingLeft: "50px",
               }}
             >
-              <h1 style={{ color: "grey" }}>CSV Preview</h1>
-              <CsvViewer />
-            </div>
+              <div
+                style={{
+                  background: "white",
+                  borderRadius: "25px",
+                  height: "90%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <h1 style={{ color: "grey" }}>CSV Preview</h1>
+                <CsvViewer />
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </div> }
+        </div>
+      )}
 
       {/* Bill Generate Section */}
-      { selectionsComplete && generateComplete && <div style={{ height: "100vh", background: "#1E1E1E" }}>
-        <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
-          <Grid
-            item
-            xs={6}
-            style={{
-              paddingTop: "230px",
-              paddingLeft: "50px",
-              paddingTop: "300px",
-            }}
-          >
-            <div
+      {selectionsComplete && generateComplete && (
+        <div style={{ height: "100vh", background: "#1E1E1E" }}>
+          <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
+            <Grid
+              item
+              xs={6}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "70px",
-                flexDirection: "column",
+                paddingTop: "230px",
+                paddingLeft: "50px",
+                paddingTop: "300px",
               }}
             >
-              <Button
+              <div
                 style={{
-                  width: "450px",
-                  height: "100px",
-                  fontSize: "32px",
-                  color: "orange",
-                  background: "white",
-                  textTransform: "none",
-                  letterSpacing: "normal",
-                  fontWeight: "bold",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "70px",
+                  flexDirection: "column",
                 }}
-                sx={{ borderRadius: 5 }}
-                variant="contained"
               >
-                Download Bill{" "}
-                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
-                  <FaDownload />
-                </div>
-              </Button>
-              <Button
-                style={{
-                  width: "450px",
-                  height: "100px",
-                  fontSize: "32px",
-                  color: "orange",
-                  background: "white",
-                  textTransform: "none",
-                  letterSpacing: "normal",
-                  fontWeight: "bold",
-                }}
-                sx={{ borderRadius: 5 }}
-                variant="contained"
-              >
-                Share Bill{" "}
-                <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
-                  <FaShareAlt />
-                </div>
-              </Button>
-              <Button
-                style={{
-                  width: "450px",
-                  height: "100px",
-                  fontSize: "32px",
-                  color: "grey",
-                  background: "#1E1E1E",
-                  textTransform: "none",
-                  letterSpacing: "normal",
-                  fontWeight: "bold",
-                }}
-                sx={{ borderRadius: 5 }}
-                variant="outlined"
-                onClick={newBill}
-              >
-                Generate new bill
-              </Button>
-            </div>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            style={{
-              paddingTop: "230px",
-              paddingRight: "50px",
-              paddingLeft: "50px",
-            }}
-          >
-            <div
+                <Button
+                  style={{
+                    width: "450px",
+                    height: "100px",
+                    fontSize: "32px",
+                    color: "orange",
+                    background: "white",
+                    textTransform: "none",
+                    letterSpacing: "normal",
+                    fontWeight: "bold",
+                  }}
+                  sx={{ borderRadius: 5 }}
+                  variant="contained"
+                >
+                  Download Bill{" "}
+                  <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                    <FaDownload />
+                  </div>
+                </Button>
+                <Button
+                  style={{
+                    width: "450px",
+                    height: "100px",
+                    fontSize: "32px",
+                    color: "orange",
+                    background: "white",
+                    textTransform: "none",
+                    letterSpacing: "normal",
+                    fontWeight: "bold",
+                  }}
+                  sx={{ borderRadius: 5 }}
+                  variant="contained"
+                >
+                  Share Bill{" "}
+                  <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
+                    <FaShareAlt />
+                  </div>
+                </Button>
+                <Button
+                  style={{
+                    width: "450px",
+                    height: "100px",
+                    fontSize: "32px",
+                    color: "grey",
+                    background: "#1E1E1E",
+                    textTransform: "none",
+                    letterSpacing: "normal",
+                    fontWeight: "bold",
+                  }}
+                  sx={{ borderRadius: 5 }}
+                  variant="outlined"
+                  onClick={newBill}
+                >
+                  Generate new bill
+                </Button>
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={6}
               style={{
-                background: "white",
-                borderRadius: "25px",
-                height: "90%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                paddingTop: "230px",
+                paddingRight: "50px",
+                paddingLeft: "50px",
               }}
             >
-              <h1 style={{ color: "grey" }}>Bill Preview</h1>
-            </div>
+              <div
+                style={{
+                  background: "white",
+                  borderRadius: "25px",
+                  height: "90%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <h1 style={{ color: "grey" }}>Bill Preview</h1>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>}
+        </div>
+      )}
     </>
   );
 };
