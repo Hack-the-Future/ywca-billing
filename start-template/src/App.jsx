@@ -44,6 +44,8 @@ const App = () => {
   const [vendors, setVendors] = React.useState([]);
   const [contacts, setContacts] = React.useState([]);
   const [phone_nums, setPhoneNums] = React.useState([]);
+  const [csvData, setCsvData] = React.useState(false);
+
   const Input = styled(MuiInput)`
     width: 52px;
   `;
@@ -222,6 +224,7 @@ const App = () => {
     if (files.length != 0) {
       console.log(files[0]);
       setFile(files[0]);
+      setCsvData(true);
     }
   };
 
