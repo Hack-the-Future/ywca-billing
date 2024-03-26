@@ -4,7 +4,7 @@ import ReactTable from "react-table-6";
 //import "react-table/react-table.css";
 import CsvInput from "./CsvInput";
 
-function CsvInterface(props) {
+function CsvInterface({file}) {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ function CsvInterface(props) {
     if (data.length && columns.length) setLoading(false);
   }, [data, columns]);
 
-  const handleFileChange = (file) => {
+  const handleFileChange = file => {
     Papa.parse(file, {
       header: true,
       dynamicTyping: true,
@@ -27,7 +27,7 @@ function CsvInterface(props) {
     });
   };
 
-  const handleDataChange = (file) => {
+  const handleDataChange = file => {
     setData(file.data);
     setColumns(makeColumns(file.meta.fields));
   };

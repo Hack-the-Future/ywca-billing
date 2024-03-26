@@ -1,6 +1,6 @@
 The following document describes how our team calculated costs for vendors of different levels.
-variable names for calculations. Variable names currently do not represent the variable neames to be used in the program, but will be updated shortly. 
-All varaible data is collected from the data provided to us by the YWCA.
+variable names for calculations. Variable names currently do not represent the variable names to be used in the program, but will be updated shortly. 
+All variable data is collected from the data provided to us by the YWCA.
 
 TC = total cost
 CbS = cost before scholarship
@@ -8,7 +8,7 @@ h = total hours spent
 oh = overtime hours
 m = months
 schp = scholarship percentage (represented in decimals 50% = 0.5)
-ft = square feet of dry stroage
+ft = square feet of dry storage
 f = freezer units
 offseason = 1 or 0 ( true or false value)
 
@@ -18,7 +18,7 @@ Level 1 vendors parameters:
 - $25/month per freezer unit
 - scholarship discount (a percent based discount on total cost)
 
-Cost calucation:
+Cost calculation:
 CbS = (20 * h) + (10 * m * (ft/10)) + (25 * m * f)
 TC = CbS * (1 - schp)
 
@@ -35,7 +35,7 @@ Level 2 vendors parameters:
 - $50/month off season storage
 - scholarship discount (a percent based discount on total cost)
 
-Cost calucation:
+Cost calculation:
 CbS = (300 * m) + (10 * m * (ft/10)) + (25 * m * f) + (10 * oh) + (50 * offseason)
 TC = CbS * (1 - schp)
 
@@ -50,7 +50,8 @@ Level 3 vendors parameters:
 - $50/month off season storage
 - scholarship discount (a percent based discount on total cost)
 
-Cost calucation:
+Cost calculation:
 CbS = (400 * m) + (10 * m * (ft/10)) + (25 * m * f) + (8 * oh) + (50 * offseason)
 TC = CbS * (1 - schp)
+
 

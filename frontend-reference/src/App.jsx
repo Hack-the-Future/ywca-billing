@@ -62,7 +62,7 @@ const App = () => {
             <Grid item xs = {7} style={{paddingTop: '230px', paddingRight: '50px', paddingLeft: '50px'}}>
             <Box sx={{ minWidth: 120}} style={{height: '100px'}}>
       <FormControl variant="filled" style={{background: 'white', borderRadius: '20px', height: '100%'}} fullWidth>
-        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Vendor</InputLabel>
+        <InputLabel id="demo-simple-select-required-label" style={{color: 'black', fontSize: '30px', fontFamily: 'Noto Sans Oriya', height: '100%', paddingTop: '12px', paddingLeft: '25px'}}>Select Vendor</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
           id="demo-simple-select-required"
