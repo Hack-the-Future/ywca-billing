@@ -8,7 +8,7 @@ import {
   Slider,
   Button,
 } from "@mui/material";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import "react-table-6/react-table.css";
 import { DropzoneArea } from "material-ui-dropzone";
 import Box from "@mui/material/Box";
@@ -86,6 +86,21 @@ const App = () => {
 
         setPhoneNums(results.data.map((entry) => entry.Phone));
         console.log(phone_nums);
+
+        // Calculate hours kitchen was used based on start and end time
+        startTime = results.data.map(entry => entry.Start_time);
+        startHours = parseInt(startTime[0,2]);
+        startMinutes = parseInt(startTime[3,5]);
+        endTime = results.data.map(entry => entry.End_time);
+        endHours = parseInt(endTime[0,2]);
+        endMinutes = parseInt(ndTime[3,5]);
+        setHours((((endHours * 60) + endMinutes) - ((startHours * 60) + startMinutes)) / 60.0);
+
+        setNumFreezers(results.data.map(entry => entry.Num_freezers));
+
+        setDryStorage(results.data.map(entry => entry.Sq_ft_dry_storage_needed));
+
+        setMonth(results.data.map(entry => entry.Date_Month)); 
       },
     });
   }
@@ -160,9 +175,9 @@ const App = () => {
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: "smooth"
+      behavior: "smooth",
     });
-  }
+  };
 
   function handleChange(event) {
     setAge(event.target.value);
@@ -197,17 +212,27 @@ const App = () => {
 
   function calculateBill() {
     if (level == 1) {
-      costPreScholarship = (20 * hours) + (10 * (dryStorage / 10)) + (25 * numFreezers);
-      totalCost = costPreScholarship * (1 - (scholarship / 100));
+      costPreScholarship =
+        20 * hours + 10 * (dryStorage / 10) + 25 * numFreezers;
+      totalCost = costPreScholarship * (1 - scholarship / 100);
     } else if (level == 2) {
-      costPreScholarship = 300 + (10  * (dryStorage / 10)) + (25 * numFreezers) + (10 * overtimeHours) + (50 * offseason);
-      totalCost = costPreScholarship * (1 - (scholarship / 100));
-    } else if (level == 3 ) {
-      costPreScholarship = 400 + (10 * (dryStorage / 10)) + (25 * numFreezers) + (8 * overtimeHours) + (50 * offseason);
-      totalCost = costPreScholarship * (1 - (scholarship / 100));
+      costPreScholarship =
+        300 +
+        10 * (dryStorage / 10) +
+        25 * numFreezers +
+        10 * overtimeHours +
+        50 * offseason;
+      totalCost = costPreScholarship * (1 - scholarship / 100);
+    } else if (level == 3) {
+      costPreScholarship =
+        400 +
+        10 * (dryStorage / 10) +
+        25 * numFreezers +
+        8 * overtimeHours +
+        50 * offseason;
+      totalCost = costPreScholarship * (1 - scholarship / 100);
     }
   }
-
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -312,23 +337,29 @@ const App = () => {
       </AppBar>
       <Grid container style={{ height: "100vh", background: "#1E1E1E" }}>
         <Grid item xs={5} style={{ paddingTop: "230px", paddingLeft: "50px" }}>
-        <div>
-      {loading ? (
-        // Display CsvInput while data is loading or not yet available
-        <CsvInput handleFileChange={handleFileChange} />
-      ) : (
-        // Once loading is false, display the ReactTable with the parsed data
-        <ReactTable
-          data={data}
-          columns={columns}
-          defaultPageSize={15}
-          className="-striped -highlight"
-          style={{ background: 'white', borderRadius: '30px' }}
-        />
-      )}
-    </div>
+          <div>
+            {loading ? (
+              // Display CsvInput while data is loading or not yet available
+              <CsvInput handleFileChange={handleFileChange} />
+            ) : (
+              // Once loading is false, display the ReactTable with the parsed data
+              <ReactTable
+                data={data}
+                columns={columns}
+                defaultPageSize={15}
+                className="-striped -highlight"
+                style={{ background: "white", borderRadius: "30px" }}
+              />
+            )}
+          </div>
         </Grid>
         <Grid
+        onClick={()=>{
+          console.log('here');
+          if (!file) {
+            toast.error("You must upload a file before using this interface.");
+          }
+        }}
           item
           xs={7}
           style={{
@@ -336,7 +367,11 @@ const App = () => {
             paddingRight: "50px",
             paddingLeft: "50px",
           }}
+          
         >
+          <div >
+
+
           <FormControl
             variant="filled"
             style={{
@@ -347,6 +382,7 @@ const App = () => {
           >
             {/* Styling for this is in CSS file */}
             <Autocomplete
+              
               onChange={handleChangeVendor}
               disablePortal
               value={vendor}
@@ -378,6 +414,7 @@ const App = () => {
               )}
             />
           </FormControl>
+          </div>
 
           {/* Moved the slider next to the label, and changed the slider color. */}
           <Box
@@ -462,7 +499,6 @@ const App = () => {
                   } else {
                     toast.error("Please upload a file!");
                   }
-                  
                 }
               }}
               style={{
@@ -532,10 +568,7 @@ const App = () => {
               </div>
             </FormControl>
                 </Box>*/}
-            <Toaster
-  position="bottom-center"
-  reverseOrder={false}
-/>
+          <Toaster position="bottom-center" reverseOrder={false} />
         </Grid>
       </Grid>
 
