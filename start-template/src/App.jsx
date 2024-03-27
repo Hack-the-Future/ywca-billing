@@ -1,4 +1,5 @@
 import React from "react";
+import {useRef} from "react"
 import {
   AppBar,
   CssBaseline,
@@ -34,7 +35,9 @@ import { AttachFile } from "@material-ui/icons";
 import CsvInput from "./CsvInput";
 import CsvInterface from "./CsvInterface";
 import Bill from "./Bill"
-import { PDFViewer } from "@react-pdf/renderer";
+import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
+import ReactPDF from '@react-pdf/renderer';
+import {pdf, saveAs} from "file-saver"
 
 const App = () => {
   const [file, setFile] = React.useState(null);
@@ -88,13 +91,13 @@ const App = () => {
         console.log(phone_nums);
 
         // Calculate hours kitchen was used based on start and end time
-        startTime = results.data.map(entry => entry.Start_time);
-        startHours = parseInt(startTime[0,2]);
-        startMinutes = parseInt(startTime[3,5]);
-        endTime = results.data.map(entry => entry.End_time);
-        endHours = parseInt(endTime[0,2]);
-        endMinutes = parseInt(ndTime[3,5]);
-        setHours((((endHours * 60) + endMinutes) - ((startHours * 60) + startMinutes)) / 60.0);
+        // startTime = results.data.map(entry => entry.Start_time);
+        // startHours = parseInt(startTime[0,2]);
+        // startMinutes = parseInt(startTime[3,5]);
+        // endTime = results.data.map(entry => entry.End_time);
+        // endHours = parseInt(endTime[0,2]);
+        // endMinutes = parseInt(ndTime[3,5]);
+        // setHours((((endHours * 60) + endMinutes) - ((startHours * 60) + startMinutes)) / 60.0);
 
         setNumFreezers(results.data.map(entry => entry.Num_freezers));
 
@@ -159,6 +162,8 @@ const App = () => {
 
   const newBill = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    //loading = true
+    setVendor("")
     setScholarship(0);
     setLevel(0);
     setVendors([]);
@@ -207,15 +212,15 @@ const App = () => {
     }*/
   }
 
-  const costPreScholarship = 0.0;
-  const totalCost = 0.0;
+  let costPreScholarship = 0.0;
+  let totalCost = 0.0;
 
   function calculateBill() {
-    if (level == 1) {
+    if (level === 1) {
       costPreScholarship =
         20 * hours + 10 * (dryStorage / 10) + 25 * numFreezers;
       totalCost = costPreScholarship * (1 - scholarship / 100);
-    } else if (level == 2) {
+    } else if (level === 2) {
       costPreScholarship =
         300 +
         10 * (dryStorage / 10) +
@@ -223,7 +228,7 @@ const App = () => {
         10 * overtimeHours +
         50 * offseason;
       totalCost = costPreScholarship * (1 - scholarship / 100);
-    } else if (level == 3) {
+    } else if (level === 3) {
       costPreScholarship =
         400 +
         10 * (dryStorage / 10) +
@@ -304,6 +309,14 @@ const App = () => {
       setCsvData(true);
     }
   };
+  
+  //Create a ref for the PDFDownloadLink component
+  const downloadLinkRef = useRef();
+
+  const handlePDFDownloadClick = () => {
+    // Programmatically click the anchor element within the PDFDownloadLink component
+    downloadLinkRef.current.click();
+  }
 
   return (
     <>
@@ -664,7 +677,8 @@ const App = () => {
                   flexDirection: "column",
                 }}
               >
-                <Button
+                  <PDFDownloadLink document={<Bill />} fileName="xyz.pdf"
+                  
                   style={{
                     width: "450px",
                     height: "100px",
@@ -675,14 +689,9 @@ const App = () => {
                     letterSpacing: "normal",
                     fontWeight: "bold",
                   }}
-                  sx={{ borderRadius: 5 }}
-                  variant="contained"
-                >
-                  Download Bill{" "}
-                  <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
-                    <FaDownload />
-                  </div>
-                </Button>
+                  >
+                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download Bill')}
+                  </PDFDownloadLink>
                 <Button
                   style={{
                     width: "450px",
@@ -736,14 +745,15 @@ const App = () => {
                   borderRadius: "25px",
                   height: "90%",
                   display: "flex",
-                  justifyContent: "center",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <PDFViewer>
+                <h1 style={{ color: "grey", padding: "0", margin: "0", paddingTop: "20px" }}>Bill Preview</h1>
+                <PDFViewer style={{height: "80%", padding: "0", margin: "0", marginBottom: "20px"}}>
                   <Bill />
                 </PDFViewer>
-                <h1 style={{ color: "grey" }}>Bill Preview</h1>
               </div>
             </Grid>
           </Grid>
