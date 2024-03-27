@@ -33,9 +33,8 @@ import { MdNavigateNext } from "react-icons/md";
 import { AttachFile } from "@material-ui/icons";
 import CsvInput from "./CsvInput";
 import CsvInterface from "./CsvInterface";
-//import CsvViewer from "react-csv-viewer";
-//import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-//import { useDemoData } from '@mui/x-data-grid-generator';
+import Bill from "./Bill"
+import { PDFViewer } from "@react-pdf/renderer";
 
 const App = () => {
   const [file, setFile] = React.useState(null);
@@ -70,7 +69,7 @@ const App = () => {
       header: true,
       skipEmptyLines: true,
       complete: function (results) {
-        console.log(results.data);
+        console.log(results.data) 
 
         // go through the file and update the vendors and levels
         setContacts(results.data.map((entry) => entry.Contact_Name));
@@ -145,6 +144,9 @@ const App = () => {
 
   const newBill = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setScholarship(0);
+    setLevel(0);
+    setVendors([]);
   };
 
   const cont = () => {
@@ -455,7 +457,6 @@ const App = () => {
                       toast.error("Select a vendor!.");
                     } else {
                       setSelectionsComplete(true); 
-                      fileAdded(true);
                       scrollToBottom();
                     }
                   } else {
@@ -478,7 +479,7 @@ const App = () => {
               sx={{ borderRadius: 5 }}
               variant="contained"
             >
-              View Bill{" "}
+              Generate Bill{" "}
               <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
                 <MdNavigateNext style={{ marginTop: "10px" }} />
               </div>
@@ -538,9 +539,9 @@ const App = () => {
         </Grid>
       </Grid>
 
-      {selectionsComplete && (
+      {/*{selectionsComplete && (
         <div style={{ height: "100vh", background: "#1E1E1E" }}>
-          {/* Bill Preview Section */}
+       
           <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
             <Grid
               item
@@ -606,10 +607,10 @@ const App = () => {
             </Grid>
           </Grid>
         </div>
-      )}
+              )*/}
 
       {/* Bill Generate Section */}
-      {selectionsComplete && generateComplete && (
+      {selectionsComplete && (
         <div style={{ height: "100vh", background: "#1E1E1E" }}>
           <Grid container style={{ height: "100%", background: "#1E1E1E" }}>
             <Grid
@@ -706,6 +707,9 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
+                <PDFViewer>
+                  <Bill />
+                </PDFViewer>
                 <h1 style={{ color: "grey" }}>Bill Preview</h1>
               </div>
             </Grid>
