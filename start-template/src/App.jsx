@@ -26,7 +26,7 @@ import { styled } from "@mui/material/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import { MdOutlineFileDownload } from "react-icons/md";
+import { MdOutlineFileDownload, MdTempleHindu } from "react-icons/md";
 import { FaShareSquare } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 import { FaShareAlt } from "react-icons/fa";
@@ -37,7 +37,7 @@ import CsvInterface from "./CsvInterface";
 import Bill from "./Bill"
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import ReactPDF from '@react-pdf/renderer';
-import {pdf, saveAs} from "file-saver"
+//import {pdf, saveAs} from "file-saver"
 
 const App = () => {
   const [file, setFile] = React.useState(null);
@@ -47,8 +47,9 @@ const App = () => {
   const [vendor, setVendor] = React.useState("");
   const [scholarship, setScholarship] = React.useState(0);
   const [vendors, setVendors] = React.useState([]);
+  const [allVendors, setAllVendors] = React.useState([]);
   const [contacts, setContacts] = React.useState([]);
-  const [phone_nums, setPhoneNums] = React.useState([]);
+  const [phoneNums, setPhoneNums] = React.useState([]);
   const [csvData, setCsvData] = React.useState(false);
   const [hours, setHours] = React.useState([]);
   const [overtimeHours, setOvertimeHours] = React.useState([]);
@@ -57,10 +58,90 @@ const App = () => {
   const [numFreezers, setNumFreezers] = React.useState([]);
   const [offseason, setOffseason] = React.useState([]);
 
+
+  // Integers storing info for vendor selected by user
+  let thisHours;
+  let thisDryStorage;
+  let thisNumFreezers;
+  let thisOffseason;
+  let thisOvertimeHours;
+
+  // Floats storing costs to go on bill
+  let hoursSubtotal = 0.0;  // Cost based on hours without scholarship
+  let freezerCost = 0.0;
+  let overtimeCost = 0.0;
+  let dryStorageCost = 0.0;
+  let offseasonCost = 0.0;
+  let scholarshipPercent = 0.0;
+  let totalCost = 0.0;
+
+
   const Input = styled(MuiInput)`
     width: 52px;
   `;
 
+
+  function getVendorData(currVendor) {
+
+    thisHours = 0;
+    let firstTime = true;
+
+    // Check every line of file
+    for (let i = 0; i < allVendors.length; i++) {
+        // Check if vendor in curr file line matches name of vendor user selected
+        if (allVendors[i] == currVendor) {
+            thisHours += hours[i];
+
+            // Other vars only set once because they should be the same for every line
+            // referring to the same vendor
+            if (firstTime) {
+                thisDryStorage = dryStorage[i];   
+                thisNumFreezers = numFreezers[i];
+                thisOffseason = offseason[i];
+                thisOvertimeHours = overtimeHours[i]; 
+                firstTime = false;
+            }
+            
+        }
+    }
+   
+  }
+
+
+  // Calculates bill based on values stored in global variables
+  // Global variables are set by the getVendorData function
+  function calculateBill() {
+    /////////////////// TODO: offseason ///////////////
+    dryStorageCost = 10 * (thisDryStorage / 10);
+    freezerCost = 25 * thisNumFreezers;
+    scholarshipPercent = 1 - (scholarship / 100);
+
+    if (level == 1) {
+        hoursSubtotal = 20 * thisHours;
+        overtimeCost = 0.0;
+    } 
+    else if (level == 2) {
+        hoursSubtotal = 300;
+        overtimeCost = 10 * thisOvertimeHours;
+        offseasonCost = 50 * thisOffseason;
+    } 
+    else if (level == 3) {
+        hoursSubtotal = 400;
+        overtimeCost = 8 * thisOvertimeHours;
+        offseasonCost = 50 * thisOffseason;
+    }
+
+    totalCost = (hoursSubtotal * scholarshipPercent) + 
+                dryStorageCost + 
+                freezerCost + 
+                overtimeCost + 
+                offseasonCost;
+
+    console.log("totalCost: %d", totalCost);
+  }
+    
+
+  // Stores all data from csv in global vars when file is uploaded
   function csvInputChange(files) {
     if (!files || files.length == 0) {
       return;
@@ -72,38 +153,53 @@ const App = () => {
       header: true,
       skipEmptyLines: true,
       complete: function (results) {
-        console.log(results.data) 
 
-        // go through the file and update the vendors and levels
-        setContacts(results.data.map((entry) => entry.Contact_Name));
-        console.log(contacts);
+        // Update arrays with all data from file line by line
+        for (let i = 0; i < results.data.length; i++) {
+            contacts[i] = results.data[i].Contact_name;
+            allVendors[i] = results.data[i].Vendor_name;
 
+
+            vendorLevel[i] = results.data[i].Level;
+            phoneNums[i] = results.data[i].Phone;
+            numFreezers[i] = parseInt(results.data[i].Num_refrigerators) +
+                             parseInt(results.data[i].Num_freezers);
+            dryStorage[i] = parseInt(results.data[i].Sq_ft_dry_storage_needed);
+            month[i] = results.data[i].Date_Month;
+
+
+            let startTime = results.data[i].Start_time
+            let startHours = parseInt(startTime.slice(0,2));
+            let startMinutes = parseInt(startTime.slice(3));
+            let endTime = results.data[i].End_time;
+            let endHours = parseInt(endTime.slice(0,2));
+            let endMinutes = parseInt(endTime.slice(3));
+            hours[i] = (endHours - startHours) + ((endMinutes - startMinutes) / 60.0)
+
+            overtimeHours[i] = (hours[i] > 50) ? (hours[i] - 50) : 0;
+            
+
+            let startOffseason = results.data[i].Month_off_season_storage_begins;
+            let endOffseason = results.data[i].Month_off_season_storage_ends;
+
+            // Note: assumes everything occurs in the same year
+            if (month >= startOffseason && month <= endOffseason) {
+                offseason[i] = 1;
+            }
+            else {
+                offseason[i] = 0;
+            }
+            
+        }
+
+
+        // Not sure why this code is needed because it sets vendors = [], but vendor dropdown won't work without it
+        // I'm just avoids the vendors array and using my own
         setVendors(
-          results.data.map((entry, i) => {
-            return { label: entry.Vendor_name, value: i };
-          })
+            results.data.map((entry, i) => {
+                return { label: entry.Vendor_name, value: i };
+            })
         );
-        console.log(vendors);
-
-        setVendorLevel(results.data.map((entry) => entry.Level));
-
-        setPhoneNums(results.data.map((entry) => entry.Phone));
-        console.log(phone_nums);
-
-        // Calculate hours kitchen was used based on start and end time
-        // startTime = results.data.map(entry => entry.Start_time);
-        // startHours = parseInt(startTime[0,2]);
-        // startMinutes = parseInt(startTime[3,5]);
-        // endTime = results.data.map(entry => entry.End_time);
-        // endHours = parseInt(endTime[0,2]);
-        // endMinutes = parseInt(ndTime[3,5]);
-        // setHours((((endHours * 60) + endMinutes) - ((startHours * 60) + startMinutes)) / 60.0);
-
-        setNumFreezers(results.data.map(entry => entry.Num_freezers));
-
-        setDryStorage(results.data.map(entry => entry.Sq_ft_dry_storage_needed));
-
-        setMonth(results.data.map(entry => entry.Date_Month)); 
       },
     });
   }
@@ -212,32 +308,7 @@ const App = () => {
     }*/
   }
 
-  let costPreScholarship = 0.0;
-  let totalCost = 0.0;
-
-  function calculateBill() {
-    if (level === 1) {
-      costPreScholarship =
-        20 * hours + 10 * (dryStorage / 10) + 25 * numFreezers;
-      totalCost = costPreScholarship * (1 - scholarship / 100);
-    } else if (level === 2) {
-      costPreScholarship =
-        300 +
-        10 * (dryStorage / 10) +
-        25 * numFreezers +
-        10 * overtimeHours +
-        50 * offseason;
-      totalCost = costPreScholarship * (1 - scholarship / 100);
-    } else if (level === 3) {
-      costPreScholarship =
-        400 +
-        10 * (dryStorage / 10) +
-        25 * numFreezers +
-        8 * overtimeHours +
-        50 * offseason;
-      totalCost = costPreScholarship * (1 - scholarship / 100);
-    }
-  }
+  
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -509,6 +580,8 @@ const App = () => {
                       setSelectionsComplete(true); 
                       scrollToBottom();
                     }
+                    getVendorData(vendor); // Gets data for specified vendor
+                    calculateBill(); // Calculates total, stored in totalCost global var
                   } else {
                     toast.error("Please upload a file!");
                   }
