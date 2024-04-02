@@ -256,9 +256,14 @@ const App = () => {
       });
   };
 
-  const newBill = () => {
+  const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+
+  const newBill = async () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    //loading = true
+    await sleep(900); // There should be a better way of doing this.
+    setSelectionsComplete(false); 
+    setLoading(true);
+    setFile(null);
     setVendor("")
     setScholarship(0);
     setLevel(0);
@@ -274,10 +279,7 @@ const App = () => {
   };
 
   const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: "855", behavior: "smooth" });
   };
 
   function handleChange(event) {
@@ -571,13 +573,14 @@ const App = () => {
             }}
           >
             <Button
-              onClick={() => {
+              onClick={ async () => {
                 {
                   if (file !== null) {
                     if (vendor === "") {
                       toast.error("Select a vendor!.");
                     } else {
                       setSelectionsComplete(true); 
+                      await sleep(500);
                       scrollToBottom();
                     }
                     getVendorData(vendor); // Gets data for specified vendor
@@ -753,7 +756,8 @@ const App = () => {
                   <PDFDownloadLink document={<Bill />} fileName="xyz.pdf"
                   
                   style={{
-                    width: "450px",
+                    borderRadius: "20px",
+                    width: "452px",
                     height: "100px",
                     fontSize: "32px",
                     color: "orange",
@@ -761,9 +765,13 @@ const App = () => {
                     textTransform: "none",
                     letterSpacing: "normal",
                     fontWeight: "bold",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textDecoration: "none"
                   }}
                   >
-                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download Bill')}
+                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' :<> Download Bill <FaDownload style={{paddingLeft: '10px'}} /> </>  )}
                   </PDFDownloadLink>
                 <Button
                   style={{
@@ -819,12 +827,12 @@ const App = () => {
                   height: "90%",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
+                  justifyContent: "center",
                   alignItems: "center",
                 }}
               >
-                <h1 style={{ color: "grey", padding: "0", margin: "0", paddingTop: "20px" }}>Bill Preview</h1>
-                <PDFViewer style={{height: "80%", padding: "0", margin: "0", marginBottom: "20px"}}>
+                <h1 style={{ color: "grey", padding: "0", margin: "0", marginBottom: "25px" }}>Bill Preview</h1>
+                <PDFViewer showToolbar={false} style={{height: "75%", marginBottom: '20px'}}>
                   <Bill />
                 </PDFViewer>
               </div>
