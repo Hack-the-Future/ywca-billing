@@ -1,6 +1,7 @@
 import React from "react";
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import Cookies from "js-cookie";
+import logo from './ywca-logo.jpg';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -32,25 +33,37 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
+  }, 
+  line: (boldness) => ({
+    borderBottom: boldness, 
+    borderBottomColor: "black",
+    borderBottomStyle: "solid", 
+    marginVertical: 5,
+  })
 });
 
 export default function () {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <Image src={logo} style={{width: "30%"}}/>
         <View style={styles.section}>
-          <View style={styles.subHeader}>
+            <Text style={styles.textContainer}>Invoice To:</Text>
+            <Text style={styles.valueContainer}>{Cookies.get("vendor")}</Text>
+            <Text style={styles.valueContainer}>{Cookies.get("address")}</Text>
+           <View style={styles.subHeader}>
             <Text style={styles.subHeaderText}>Description</Text>
             <Text style={styles.subHeaderText}>Usage</Text>
             <Text style={styles.subHeaderText}>Rate</Text>
             <Text style={styles.subHeaderText}>Subtotal</Text>
           </View>
-
+          <View style = {styles.line({lineBoldness: 3})}></View>
           <View style={styles.billItem}>
             <Text style={styles.textContainer}>Tier Cost:</Text>
+            
             <Text style={styles.valueContainer}>{Cookies.get("subtotal")}</Text>
           </View>
+          <View style = {styles.line({lineBoldness: 1})}></View>
           <View style={styles.billItem}>
             <Text style={styles.textContainer}>Scholarship:</Text>
             <Text style={styles.valueContainer}>

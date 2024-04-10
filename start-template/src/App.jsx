@@ -59,6 +59,7 @@ const App = () => {
   const [dryStorage, setDryStorage] = React.useState([]);
   const [numFreezers, setNumFreezers] = React.useState([]);
   const [offseason, setOffseason] = React.useState([]);
+  const [address, setAddress] = React.useState([]);
 
 
 
@@ -77,6 +78,8 @@ const App = () => {
   let offseasonCost = 0.0;
   let scholarshipPercent = 0.0;
   let totalCost = 0.0;
+  
+  let thisAddress = "";
 
 
   const Input = styled(MuiInput)`
@@ -102,19 +105,17 @@ const App = () => {
                 thisNumFreezers = numFreezers[i];
                 thisOffseason = offseason[i];
                 thisOvertimeHours = overtimeHours[i]; 
+                thisAddress = address[i];
                 firstTime = false;
             }
-            
         }
     }
-   
   }
 
 
   // Calculates bill based on values stored in global variables
   // Global variables are set by the getVendorData function
   function calculateBill() {
-    /////////////////// TODO: offseason ///////////////
     dryStorageCost = 10 * (thisDryStorage / 10);
     freezerCost = 25 * thisNumFreezers;
     scholarshipPercent = 1 - (scholarship / 100);
@@ -133,6 +134,9 @@ const App = () => {
         overtimeCost = 8 * thisOvertimeHours;
         offseasonCost = 50 * thisOffseason;
     }
+    else {
+      hoursSubtotal = -1;
+    }
 
     totalCost = (hoursSubtotal * scholarshipPercent) + 
                 dryStorageCost + 
@@ -141,6 +145,7 @@ const App = () => {
                 offseasonCost;
 
     console.log("totalCost: %d", totalCost);
+    Cookies.set('vendor', vendor);
     Cookies.set('cost', totalCost);
     Cookies.set('dryStorage', dryStorageCost);
     Cookies.set('offSeason', offseasonCost);
@@ -149,6 +154,8 @@ const App = () => {
     Cookies.set('subtotal', hoursSubtotal);
     Cookies.set('scholarship', scholarshipPercent);
     Cookies.set('actualScholarship', scholarship);
+    Cookies.set('level', level);
+    Cookies.set('address', thisAddress);
   }
     
 
@@ -170,6 +177,13 @@ const App = () => {
             contacts[i] = results.data[i].Contact_name;
             allVendors[i] = results.data[i].Vendor_name;
 
+            let street = results.data[i].Street;
+            let city = results.data[i].City;
+            let state = results.data[i].State;
+            let zip = results.data[i].Zip;
+
+            let currAddress = street + " " + city + ", " + state + " " + zip;
+            address[i] = currAddress;
 
             vendorLevel[i] = results.data[i].Level;
             phoneNums[i] = results.data[i].Phone;
@@ -313,6 +327,7 @@ const App = () => {
 
   function handleScholarshipChange(event) {
     setScholarship(event.target.value);
+    Cookies.set('actualScholarship', scholarship);
     /*if (event.target.value < 0 || event.target.value > 100) {
       value = 0;
       setScholarship(100)
@@ -591,6 +606,7 @@ const App = () => {
                       toast.error("Select a vendor!.");
                     } else {
                       setSelectionsComplete(true); 
+                      Cookies.set("vendor", vendor);
                       await sleep(500);
                       scrollToBottom();
                     }
