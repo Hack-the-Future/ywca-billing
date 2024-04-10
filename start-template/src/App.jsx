@@ -1,5 +1,6 @@
 import React from "react";
 import {useRef} from "react"
+import Cookies from 'js-cookie';
 import {
   AppBar,
   CssBaseline,
@@ -54,9 +55,11 @@ const App = () => {
   const [hours, setHours] = React.useState([]);
   const [overtimeHours, setOvertimeHours] = React.useState([]);
   const [month, setMonth] = React.useState([]);
+  const [total, setTotal] = React.useState(0);
   const [dryStorage, setDryStorage] = React.useState([]);
   const [numFreezers, setNumFreezers] = React.useState([]);
   const [offseason, setOffseason] = React.useState([]);
+
 
 
   // Integers storing info for vendor selected by user
@@ -138,6 +141,14 @@ const App = () => {
                 offseasonCost;
 
     console.log("totalCost: %d", totalCost);
+    Cookies.set('cost', totalCost);
+    Cookies.set('dryStorage', dryStorageCost);
+    Cookies.set('offSeason', offseasonCost);
+    Cookies.set('overtime', overtimeCost);
+    Cookies.set('freezer', freezerCost);
+    Cookies.set('subtotal', hoursSubtotal);
+    Cookies.set('scholarship', scholarshipPercent);
+    Cookies.set('actualScholarship', scholarship);
   }
     
 
@@ -753,11 +764,10 @@ const App = () => {
                   flexDirection: "column",
                 }}
               >
-                  <PDFDownloadLink document={<Bill />} fileName="xyz.pdf"
-                  
+                  <PDFDownloadLink document={<Bill />} fileName="bill_preview.pdf"
                   style={{
                     borderRadius: "20px",
-                    width: "452px",
+                    width: "460px",
                     height: "100px",
                     fontSize: "32px",
                     color: "orange",
