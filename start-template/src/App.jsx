@@ -78,6 +78,7 @@ const App = () => {
   let offseasonCost = 0.0;
   let scholarshipPercent = 0.0;
   let totalCost = 0.0;
+  let hoursTimesScholarship = 0.0;
   
   let thisAddress = "";
 
@@ -119,6 +120,7 @@ const App = () => {
     dryStorageCost = 10 * (thisDryStorage / 10);
     freezerCost = 25 * thisNumFreezers;
     scholarshipPercent = 1 - (scholarship / 100);
+    thisOvertimeHours = (thisHours > 50) ? (thisHours - 50) : 0;
 
     if (level == 1) {
         hoursSubtotal = 20 * thisHours;
@@ -138,13 +140,18 @@ const App = () => {
       hoursSubtotal = -1;
     }
 
-    totalCost = (hoursSubtotal * scholarshipPercent) + 
+    hoursTimesScholarship = hoursSubtotal * scholarshipPercent;
+    console.log("thisOvertimeHours: " + thisOvertimeHours);
+    console.log("overtimeCost: " + overtimeCost);
+
+    totalCost = (hoursTimesScholarship) + 
                 dryStorageCost + 
                 freezerCost + 
                 overtimeCost + 
                 offseasonCost;
 
     console.log("totalCost: %d", totalCost);
+    
     Cookies.set('vendor', vendor);
     Cookies.set('cost', totalCost);
     Cookies.set('dryStorage', dryStorageCost);
@@ -153,9 +160,14 @@ const App = () => {
     Cookies.set('freezer', freezerCost);
     Cookies.set('subtotal', hoursSubtotal);
     Cookies.set('scholarship', scholarshipPercent);
-    Cookies.set('actualScholarship', scholarship);
+    Cookies.set('hoursTimesScholarship', Math.round(hoursTimesScholarship));
+
     Cookies.set('level', level);
     Cookies.set('address', thisAddress);
+
+
+    Cookies.set('actualScholarship', scholarship);
+
   }
     
 
@@ -202,6 +214,8 @@ const App = () => {
             hours[i] = (endHours - startHours) + ((endMinutes - startMinutes) / 60.0)
 
             overtimeHours[i] = (hours[i] > 50) ? (hours[i] - 50) : 0;
+
+            
             
 
             let startOffseason = results.data[i].Month_off_season_storage_begins;
@@ -221,7 +235,7 @@ const App = () => {
         // Not sure why this code is needed because it sets vendors = [], but vendor dropdown won't work without it
         // I'm just avoids the vendors array and using my own
         setVendors(
-            results.data.map((entry, i) => {
+            results.data.map((entry, i) => { 
                 return { label: entry.Vendor_name, value: i };
             })
         );
@@ -304,7 +318,7 @@ const App = () => {
   };
 
   const scrollToBottom = () => {
-    window.scrollTo({ top: "855", behavior: "smooth" });
+    window.scrollTo({ top: "1000", behavior: "smooth" });
   };
 
   function handleChange(event) {
@@ -326,8 +340,9 @@ const App = () => {
   const Newlabl = "Line1\nLine2";
 
   function handleScholarshipChange(event) {
+    console.log(event.target.value);
     setScholarship(event.target.value);
-    Cookies.set('actualScholarship', scholarship);
+    //Cookies.set('actualScholarship', scholarship);
     /*if (event.target.value < 0 || event.target.value > 100) {
       value = 0;
       setScholarship(100)
@@ -427,15 +442,15 @@ const App = () => {
           <Grid container style={{ alignItems: "center" }}>
             <Grid item xs={9} style={{ justify: "center" }}>
               <img
-                src={require("./ywca-logo.jpg")}
-                style={{ height: "140px" }}
+                src={require("./ywcalogo.png")}
+                style={{ height: "95px" }}
               ></img>
             </Grid>
             <Grid
               item
               xs={3}
               style={{
-                background: "orange",
+                background: "#FA4616",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -458,9 +473,9 @@ const App = () => {
               <ReactTable
                 data={data}
                 columns={columns}
-                defaultPageSize={15}
+                defaultPageSize={10}
                 className="-striped -highlight"
-                style={{ background: "white", borderRadius: "30px" }}
+                style={{ background: "white", borderRadius: "20px" }}
               />
             )}
           </div>
@@ -587,7 +602,8 @@ const App = () => {
                 min={0}
                 max={100}
                 onChange={handleScholarshipChange}
-                style={{ width: "89%", color: "orange" }}
+                
+                style={{ width: "89%", color: "#FA4616" }}
               />
             </div>
           </Box>
@@ -607,11 +623,16 @@ const App = () => {
                     } else {
                       setSelectionsComplete(true); 
                       Cookies.set("vendor", vendor);
+                      Cookies.set("actualScholarship", scholarship);
+                      getVendorData(vendor);
+                      calculateBill(); // Calculates total, stored in totalCost global var
+
+                      
                       await sleep(500);
                       scrollToBottom();
                     }
-                    getVendorData(vendor); // Gets data for specified vendor
-                    calculateBill(); // Calculates total, stored in totalCost global var
+                     // Gets data for specified vendor
+                    
                   } else {
                     toast.error("Please upload a file!");
                   }
@@ -623,7 +644,7 @@ const App = () => {
                 height: "50px",
                 fontSize: "30px",
                 color: "white",
-                background: "orange",
+                background: "#FA4616",
                 textTransform: "none",
                 letterSpacing: "normal",
                 fontWeight: "bold",
@@ -786,7 +807,7 @@ const App = () => {
                     width: "460px",
                     height: "100px",
                     fontSize: "32px",
-                    color: "orange",
+                    color: "#FA4616",
                     background: "white",
                     textTransform: "none",
                     letterSpacing: "normal",
@@ -799,7 +820,7 @@ const App = () => {
                   >
                     {({ blob, url, loading, error }) => (loading ? 'Loading document...' :<> Download Bill <FaDownload style={{paddingLeft: '10px'}} /> </>  )}
                   </PDFDownloadLink>
-                <Button
+                {/*<Button
                   style={{
                     width: "450px",
                     height: "100px",
@@ -817,7 +838,7 @@ const App = () => {
                   <div style={{ paddingLeft: "10px", paddingTop: "8px" }}>
                     <FaShareAlt />
                   </div>
-                </Button>
+                </Button>*/}
                 <Button
                   style={{
                     width: "450px",
